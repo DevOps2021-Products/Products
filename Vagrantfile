@@ -55,18 +55,18 @@ Vagrant.configure(2) do |config|
   end
 
   # Copy the ssh keys into the vm for git access
-  # if File.exists?(File.expand_path("~/.ssh/id_rsa"))
-  #   config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
-  # end
+  if File.exists?(File.expand_path("~/.ssh/id_rsa"))
+    config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
+  end
 
-  # if File.exists?(File.expand_path("~/.ssh/id_rsa.pub"))
-  #   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
-  # end
+  if File.exists?(File.expand_path("~/.ssh/id_rsa.pub"))
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+  end
 
   # Copy your .vimrc file so that your vi looks like you expect
-  # if File.exists?(File.expand_path("~/.vimrc"))
-  #   config.vm.provision "file", source: "~/.vimrc", destination: "~/.vimrc"
-  # end
+  if File.exists?(File.expand_path("~/.vimrc"))
+    config.vm.provision "file", source: "~/.vimrc", destination: "~/.vimrc"
+  end
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
