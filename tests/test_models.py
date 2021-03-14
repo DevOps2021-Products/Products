@@ -7,6 +7,10 @@ import unittest
 import os
 from service.models import YourResourceModel, DataValidationError, db
 
+DATABASE_URI = os.getenv(
+    "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
+)
+
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
