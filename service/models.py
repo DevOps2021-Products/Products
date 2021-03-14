@@ -25,7 +25,14 @@ class Product(db.Model):
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(63))
+    name = db.Column(db.String(63), nullable=False)
+    price = db.Column(db.String(63), nullable=False)
+    category = db.Column(db.String(63), nullable=False)
+    stock_status = db.Column(db.String(63), nullable=False)
+    short_description = db.Column(db.String(63))
+    long_description = db.Column(db.String(63))
+    rating = db.Column(db.String(63))
+    
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
@@ -56,7 +63,13 @@ class Product(db.Model):
         """ Serializes a Product into a dictionary """
         return {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "price": self.price,
+            "category": self.category,
+            "stock_status": self.stock_status,
+            "short_description": self.short_description,
+            "long_description": self.long_description,
+            "rating": self.rating
         }
 
     def deserialize(self, data):
@@ -68,6 +81,12 @@ class Product(db.Model):
         """
         try:
             self.name = data["name"]
+            self.price = data["price"] 
+            self.category = data["category"]
+            self.stock_status = data["stock_status"]
+            self.short_description = data.get("short_description")
+            self.long_description = data.get("long_description")
+            self.rating = data.get("rating")
         except KeyError as error:
             raise DataValidationError("Invalid Product: missing " + error.args[0])
         except TypeError as error:

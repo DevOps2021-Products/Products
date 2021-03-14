@@ -1,5 +1,5 @@
 """
-Test cases for <your resource name> Model
+Test cases for Product Model
 
 """
 import logging
@@ -8,10 +8,10 @@ import os
 from service.models import YourResourceModel, DataValidationError, db
 
 ######################################################################
-#  <your resource name>   M O D E L   T E S T   C A S E S
+#  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
-class TestYourResourceModel(unittest.TestCase):
-    """ Test Cases for <your resource name> Model """
+class TestProductModel(unittest.TestCase):
+    """ Test Cases for Product Model """
 
     @classmethod
     def setUpClass(cls):
