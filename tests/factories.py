@@ -1,0 +1,22 @@
+"""
+Test Factory to make fake objects for testing
+"""
+import factory
+from factory.fuzzy import FuzzyChoice
+from service.models import Product
+
+
+class ProductFactory(factory.Factory):
+    """ Creates fake products """
+
+    class Meta:
+        model = Product
+
+    id = factory.Sequence(lambda n: n)
+    sku = factory.Faker("")
+    name = factory.Faker("first_name")
+    category = FuzzyChoice(choices=["food", "computers", "phones", "hardware"])
+    stock_status = FuzzyChoice(choices=[True, False])
+    price = FuzzyChoice(choices=[100, 10000, 500, 750])
+    short_description = FuzzyChoice(choices=["the tastiest food", "the fastest computer", "the shinest new phones", "the tools you need for the job"])
+    rating = FuzzyChoice(choices=[1, 2, 3, 4, 5])

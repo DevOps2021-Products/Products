@@ -44,7 +44,6 @@ class TestProductServer(TestCase):
 
     def _create_product(self):
         return Product(
-            id = 123,
             sku=12345,
             name="ABCchocolate", 
             category="food", 
@@ -77,6 +76,7 @@ class TestProductServer(TestCase):
         """ Get a single Product """
         # get the id of a pet
         test_product = self._create_product()
+        test_product.create()
         resp = self.app.get(
             "/products/{}".format(test_product.id), content_type="application/json"
         )

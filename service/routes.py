@@ -138,7 +138,7 @@ def get_products(product_id):
     product = Product.find(product_id)
     if not product:
         raise NotFound("Product with id '{}' was not found.".format(product_id))
-    return make_response(jsonify(pet.serialize()), status.HTTP_200_OK)
+    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
 
 ######################################################################
 # CREATE A NEW PRODUCT

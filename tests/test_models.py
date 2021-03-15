@@ -139,3 +139,64 @@ class TestProduct(unittest.TestCase):
         self.assertNotEqual(product.id, None)
         products = Product.all()
         self.assertEqual(len(products), 1)
+
+    def test_find_product(self):
+        """ Find a Product by ID """
+        products = ProductFactory.create_batch(3)
+        logging.debug(product)
+        # make sure they got saved
+        self.assertEqual(len(Product.all()), 3)
+        # find the 2nd product in the list
+        product = Product.find(products[1].id)
+        self.assertIsNot(product, None)
+        self.assertEqual(product.id, products[1].id)
+        self.assertEqual(product.name, products[1].name)
+        self.assertEqual(product.available, products[1].available)
+
+    def test_find_by_category(self):
+        """ Find Products by Category """
+        Product(name="fido", category="dog", available=True).create()
+        Product(name="kitty", category="cat", available=False).create()
+        products = Product.find_by_category("cat")
+        self.assertEqual(products[0].category, "cat")
+        self.assertEqual(products[0].name, "kitty")
+        self.assertEqual(products[0].available, False)
+
+    def test_find_by_name(self):
+        """ Find a Product by Name """
+        Product(name="fido", category="dog", available=True).create()
+        Product(name="kitty", category="cat", available=False).create()
+        products = Product.find_by_name("kitty")
+        self.assertEqual(products[0].category, "cat")
+        self.assertEqual(products[0].name, "kitty")
+        self.assertEqual(products[0].available, False)
+
+    def test_find_by_availability(self):
+        """ Find Product by Category """
+        Product(name="fido", category="dog", available=True).create()
+        Product(name="kitty", category="cat", available=False).create()
+        Product(name="fifi", category="dog", available=True).create()
+        products = Product.find_by_availability(False)
+        product_list = [product for product in products]
+        self.assertEqual(len(product_list), 1)
+        self.assertEqual(products[0].name, "kitty")
+        self.assertEqual(products[0].category, "cat")
+        products = Product.find_by_availability(True)
+        product_list = [product for product in products]
+        self.assertEqual(len(product_list), 2)
+
+    def test_find_or_404_found(self):
+        """ Find or return 404 found """
+        products = ProductFactory.create_batch(3)
+        for product in products:
+            products.create()
+
+        product = Product.find_or_404(products[1].id)
+        self.assertIsNot(product, None)
+        self.assertEqual(product.id, products[1].id)
+        self.assertEqual(product.name, products[1].name)
+        self.assertEqual(product.available, products[1].available)
+
+    def test_find_or_404_not_found(self):
+        """ Find or return 404 NOT found """
+        self.assertRaises(NotFound, Product.find_or_404, 0)
