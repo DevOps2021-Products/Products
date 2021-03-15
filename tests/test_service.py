@@ -20,6 +20,7 @@ DATABASE_URI = os.getenv(
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
 class TestProductServer(TestCase):
     """ REST API Server Tests """
 
@@ -57,6 +58,7 @@ class TestProductServer(TestCase):
 ######################################################################
 #  P L A C E   T E S T   C A S E S   H E R E 
 ######################################################################
+    
     def test_index(self):
         """ Test the Home Page """
         resp = self.app.get("/")
@@ -101,3 +103,17 @@ class TestProductServer(TestCase):
         # self.assertEqual(new_product["price"], test_product.price)
         # self.assertEqual(new_product["rating"], test_product.rating)
         # self.assertEqual(new_product["stock_status"], test_product.stock_status)
+
+    def test_delete_product(self):
+        """ Delete a Product """
+        test_product = self._create_product()
+        resp = self.app.delete(
+            "/products/{}".format(test_product.id), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(resp.data), 0)
+        # make sure they are deleted
+        resp = self.app.get(
+            "/products/{}".format(test_product.id), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)

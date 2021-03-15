@@ -21,6 +21,7 @@ from . import app
 ######################################################################
 # Error Handlers
 ######################################################################
+
 @app.errorhandler(DataValidationError)
 def request_validation_error(error):
     """ Handles Value Errors from bad data """
@@ -98,6 +99,7 @@ def internal_server_error(error):
 ######################################################################
 # GET INDEX
 ######################################################################
+
 @app.route("/")
 def index():
     """ Root URL response """
@@ -106,6 +108,7 @@ def index():
 ######################################################################
 # CREATE A NEW PRODUCT
 ######################################################################
+
 @app.route("/products", methods=["POST"])
 def create_products():
     """
@@ -124,6 +127,24 @@ def create_products():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+######################################################################
+# DELETE A PRODUCT
+######################################################################
+
+@app.route("/products/<int:product_id>", methods=["DELETE"])
+def delete_products(product_id):
+    """
+    Delete a Product
+    This endpoint will delete a Product based the id specified in the path
+    """
+    app.logger.info("Request to delete product with id: %s", product_id)
+    product = Product.find(product_id)
+    if product:
+        product.delete()
+        return make_response("", status.HTTP_204_NO_CONTENT)
+    else:
+        return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S

@@ -15,6 +15,7 @@ DATABASE_URI = os.getenv(
 ######################################################################
 #  P R O D U C T   M O D E L   T E S T   C A S E S
 ######################################################################
+
 class TestProduct(unittest.TestCase):
     """ Test Cases for Product Model """
 
@@ -135,7 +136,16 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(product.id, None)
         product.create()
 
-        # Asert that it was assigned an id and shows up in the database
+        # Assert that it was assigned an id and shows up in the database
         self.assertNotEqual(product.id, None)
         products = Product.all()
         self.assertEqual(len(products), 1)
+
+    def test_delete_a_product(self):
+        """ Delete a Product """
+        product = self._create_product()
+        product.create()
+        self.assertEqual(len(Product.all()), 1)
+        # delete the product and make sure it isn't in the database
+        product.delete()
+        self.assertEqual(len(Product.all()), 0)
