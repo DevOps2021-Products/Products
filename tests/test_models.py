@@ -1,5 +1,5 @@
 """
-Test cases for <your resource name> Model
+Test cases for Product Model
 
 """
 import logging
@@ -37,10 +37,105 @@ class TestProduct(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
+    def _create_product(self):
+        return Product(
+            sku="12345",
+            name="ABCchocolate", 
+            category="food", 
+            short_description="dark chocolate",
+            long_description="lindts dark chocolate Christmas limited version",
+            price="28",
+            rating="4", 
+            stock_status=True
+        )
+
 ######################################################################
 #  P L A C E   T E S T   C A S E S   H E R E 
 ######################################################################
 
-    def test_XXXX(self):
-        """ Test something """
-        self.assertTrue(True)
+    def test_create_a_product(self):
+        """ Create a product and assert that it exists """
+        product = self._create_product()
+        
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.sku, "12345")
+        self.assertEqual(product.name, "ABCchocolate")
+        self.assertEqual(product.category, "food")
+        self.assertEqual(product.short_description, "dark chocolate")
+        self.assertEqual(product.long_description, "lindts dark chocolate Christmas limited version")
+        self.assertEqual(product.price, "28")
+        self.assertEqual(product.rating, "4")
+        self.assertEqual(product.stock_status, True)
+
+        # Test product without long description
+        product = Product(
+            sku="12345",
+            name="ABCchocolate", 
+            category="food", 
+            short_description="dark chocolate",
+            price="28",
+            rating="4", 
+            stock_status=True
+        )
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.long_description, None)
+
+        # Test product without ratings
+        product = Product(
+            sku="12345",
+            name="ABCchocolate", 
+            category="food", 
+            short_description="dark chocolate",
+            long_description="lindts dark chocolate Christmas limited version",
+            price="28",
+            stock_status=True
+        )
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.rating, None)
+
+        # Test product without stock_status
+        product = Product(
+            sku="12345",
+            name="ABCchocolate", 
+            category="food", 
+            short_description="dark chocolate",
+            long_description="lindts dark chocolate Christmas limited version",
+            price="28",
+            rating="4"
+        )
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.stock_status, None)
+
+        # Test product with stock_status false
+        product = Product(
+            sku="12345",
+            name="ABCchocolate", 
+            category="food", 
+            short_description="dark chocolate",
+            long_description="lindts dark chocolate Christmas limited version",
+            price="28",
+            rating="4", 
+            stock_status=False
+        )
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        self.assertEqual(product.stock_status, False)
+
+    def test_add_a_product(self):
+        """ Create a product and add it to the database """
+        products = Product.all()
+        self.assertEqual(products, [])
+
+        product = self._create_product()
+        self.assertTrue(product != None)
+        self.assertEqual(product.id, None)
+        product.create()
+
+        # Asert that it was assigned an id and shows up in the database
+        self.assertNotEqual(product.id, None)
+        products = Product.all()
+        self.assertEqual(len(products), 1)
