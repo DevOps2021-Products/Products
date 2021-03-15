@@ -18,14 +18,21 @@ class DataValidationError(Exception):
 
 class Product(db.Model):
     """
-    Class that represents a <your resource model name>
+    Class that represents a product
     """
 
     app = None
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(63))
+    sku = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(63), nullable=False)
+    category = db.Column(db.String(63), nullable=False)
+    short_description = db.Column(db.String(63), nullable=False)
+    long_description = db.Column(db.String(100))
+    price = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Integer)
+    stock_status = db.Column(db.Boolean)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
@@ -56,7 +63,14 @@ class Product(db.Model):
         """ Serializes a Product into a dictionary """
         return {
             "id": self.id,
-            "name": self.name
+            "sku": self.sku,
+            "name": self.name,
+            "category": self.category,
+            "short_description": self.short_description,
+            "long_description": self.long_description,
+            "price": self.price,
+            "rating": self.rating,
+            "stock_status": self.stock_status
         }
 
     def deserialize(self, data):
@@ -67,7 +81,14 @@ class Product(db.Model):
             data (dict): A dictionary containing the resource data
         """
         try:
+            self.sku = data["sku"]
             self.name = data["name"]
+            self.category = data["category"]
+            self.short_description = data["short_description"]
+            self.long_description = data.get("long_description")
+            self.price = data["price"]
+            self.rating = data.get("rating")
+            self.stock_status = data.get("stock_status")
         except KeyError as error:
             raise DataValidationError("Invalid Product: missing " + error.args[0])
         except TypeError as error:
