@@ -26,12 +26,12 @@ class Product(db.Model):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(63), nullable=False)
-    price = db.Column(db.String(63), nullable=False)
+    price = db.Column(db.Double, nullable=False)
     category = db.Column(db.String(63), nullable=False)
-    stock_status = db.Column(db.String(63), nullable=False)
+    stock_status = db.Column(db.Boolean, nullable=False)
     short_description = db.Column(db.String(63))
-    long_description = db.Column(db.String(63))
-    rating = db.Column(db.String(63))
+    long_description = db.Column(db.String(200))
+    rating = db.Column(db.Integer)
     
 
     def __repr__(self):
