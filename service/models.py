@@ -25,14 +25,14 @@ class Product(db.Model):
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
-    sku_number = db.Column(db.Integer, nullable=False)
+    sku = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(63), nullable=False)
     category = db.Column(db.String(63), nullable=False)
     short_description = db.Column(db.String(63), nullable=False)
     long_description = db.Column(db.String(100))
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer)
-    stock_status = db.Column(db.Boolean())
+    stock_status = db.Column(db.Boolean)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
@@ -63,7 +63,7 @@ class Product(db.Model):
         """ Serializes a Product into a dictionary """
         return {
             "id": self.id,
-            "sku_number": self.sku_number,
+            "sku": self.sku,
             "name": self.name,
             "category": self.category,
             "short_description": self.short_description,
@@ -81,7 +81,7 @@ class Product(db.Model):
             data (dict): A dictionary containing the resource data
         """
         try:
-            self.sku_number = data["sku_number"]
+            self.sku = data["sku"]
             self.name = data["name"]
             self.category = data["category"]
             self.short_description = data["short_description"]
