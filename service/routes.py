@@ -9,6 +9,7 @@ import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status  # HTTP Status Codes
+from werkzeug.exceptions import NotFound
 
 # For this example we'll use SQLAlchemy, a popular ORM that supports a
 # variety of backends including SQLite, MySQL, and PostgreSQL
@@ -154,7 +155,7 @@ def create_product():
     product.deserialize(request.get_json())
     product.create()
     message = product.serialize()
-    location_url = url_for("get_product", product_id=product.id, _external=True)
+    location_url = url_for("get_products", product_id=product.id, _external=True)
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )

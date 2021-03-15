@@ -44,6 +44,7 @@ class TestProductServer(TestCase):
 
     def _create_product(self):
         return Product(
+            id = 123,
             sku=12345,
             name="ABCchocolate", 
             category="food", 
@@ -63,6 +64,30 @@ class TestProductServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # data = resp.get_json()
         # self.assertEqual(data["name"], "Product REST API Service")
+
+    def test_get_product_list(self):
+        """ Get a list of Products """
+        self._create_product()
+        resp = self.app.get("/products")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 0)
+
+    def test_get_product(self):
+        """ Get a single Product """
+        # get the id of a pet
+        test_product = self._create_product()
+        resp = self.app.get(
+            "/products/{}".format(test_product.id), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(data["name"], test_product.name)
+
+    def test_get_product_not_found(self):
+        """ Get a Product thats not found """
+        resp = self.app.get("/products/0")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_product(self):
         """ Create a new Product """
