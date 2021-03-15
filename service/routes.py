@@ -141,9 +141,7 @@ def delete_products(product_id):
     product = Product.find(product_id)
     if product:
         product.delete()
-        return make_response("", status.HTTP_204_NO_CONTENT)
-    else:
-        return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return make_response("", status.HTTP_204_NO_CONTENT)
     
 
 ######################################################################
