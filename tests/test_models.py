@@ -5,8 +5,10 @@ Test cases for Product Model
 import logging
 import unittest
 import os
+from werkzeug.exceptions import NotFound
 from service.models import Product, DataValidationError, db
 from service import app
+from .factories import ProductFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
@@ -143,6 +145,8 @@ class TestProduct(unittest.TestCase):
     def test_find_product(self):
         """ Find a Product by ID """
         products = ProductFactory.create_batch(3)
+        for product in products:
+            product.create()
         logging.debug(product)
         # make sure they got saved
         self.assertEqual(len(Product.all()), 3)
@@ -151,51 +155,19 @@ class TestProduct(unittest.TestCase):
         self.assertIsNot(product, None)
         self.assertEqual(product.id, products[1].id)
         self.assertEqual(product.name, products[1].name)
-        self.assertEqual(product.available, products[1].available)
-
-    def test_find_by_category(self):
-        """ Find Products by Category """
-        Product(name="fido", category="dog", available=True).create()
-        Product(name="kitty", category="cat", available=False).create()
-        products = Product.find_by_category("cat")
-        self.assertEqual(products[0].category, "cat")
-        self.assertEqual(products[0].name, "kitty")
-        self.assertEqual(products[0].available, False)
-
-    def test_find_by_name(self):
-        """ Find a Product by Name """
-        Product(name="fido", category="dog", available=True).create()
-        Product(name="kitty", category="cat", available=False).create()
-        products = Product.find_by_name("kitty")
-        self.assertEqual(products[0].category, "cat")
-        self.assertEqual(products[0].name, "kitty")
-        self.assertEqual(products[0].available, False)
-
-    def test_find_by_availability(self):
-        """ Find Product by Category """
-        Product(name="fido", category="dog", available=True).create()
-        Product(name="kitty", category="cat", available=False).create()
-        Product(name="fifi", category="dog", available=True).create()
-        products = Product.find_by_availability(False)
-        product_list = [product for product in products]
-        self.assertEqual(len(product_list), 1)
-        self.assertEqual(products[0].name, "kitty")
-        self.assertEqual(products[0].category, "cat")
-        products = Product.find_by_availability(True)
-        product_list = [product for product in products]
-        self.assertEqual(len(product_list), 2)
+        self.assertEqual(product.stock_status, products[1].stock_status)
 
     def test_find_or_404_found(self):
         """ Find or return 404 found """
         products = ProductFactory.create_batch(3)
         for product in products:
-            products.create()
+            product.create()
 
         product = Product.find_or_404(products[1].id)
         self.assertIsNot(product, None)
         self.assertEqual(product.id, products[1].id)
         self.assertEqual(product.name, products[1].name)
-        self.assertEqual(product.available, products[1].available)
+        self.assertEqual(product.stock_status, products[1].stock_status)
 
     def test_find_or_404_not_found(self):
         """ Find or return 404 NOT found """

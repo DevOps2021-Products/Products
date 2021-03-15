@@ -13,8 +13,8 @@ class ProductFactory(factory.Factory):
         model = Product
 
     id = factory.Sequence(lambda n: n)
-    sku = factory.Faker("")
-    name = factory.Faker("first_name")
+    sku = FuzzyChoice(choices=[1234, 3456, 6789, 4179])
+    name = FuzzyChoice(choices=["cheeseburger", "Macbook Pro", "iPhone 12 Pro", "Buzzsaw"])
     category = FuzzyChoice(choices=["food", "computers", "phones", "hardware"])
     stock_status = FuzzyChoice(choices=[True, False])
     price = FuzzyChoice(choices=[100, 10000, 500, 750])
