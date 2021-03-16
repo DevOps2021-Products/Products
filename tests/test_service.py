@@ -139,8 +139,7 @@ class TestProductServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(len(resp.data), 0)
         # make sure they are deleted
-        # ToDo: Uncomment once Get is implemented
-        # resp = self.app.get(
-        #     "/products/{}".format(test_product.id), content_type="application/json"
-        # )
-        # self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        resp = self.app.get(
+            "/products/{}".format(test_product.id), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
