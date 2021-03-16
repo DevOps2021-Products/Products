@@ -9,6 +9,7 @@ import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
 from flask_api import status  # HTTP Status Codes
+from werkzeug.exceptions import NotFound
 
 # For this example we'll use SQLAlchemy, a popular ORM that supports a
 # variety of backends including SQLite, MySQL, and PostgreSQL
@@ -104,10 +105,46 @@ def index():
     return {"message": "Hello World"}, status.HTTP_200_OK
 
 ######################################################################
+# LIST ALL PRODUCTS
+######################################################################
+@app.route("/products", methods=["GET"])
+def list_products():
+    """ Returns all of the Products """
+    app.logger.info("Request for product list")
+    products = []
+    category = request.args.get("category")
+    name = request.args.get("name")
+    if category:
+        products = Product.find_by_category(category)
+    elif name:
+        products = Product.find_by_name(name)
+    else:
+        products = Product.all()
+
+    results = [products.serialize() for product in products]
+    return make_response(jsonify(results), status.HTTP_200_OK)
+
+
+######################################################################
+# RETRIEVE A PRODUCT
+######################################################################
+@app.route("/products/<int:product_id>", methods=["GET"])
+def get_products(product_id):
+    """
+    Retrieve a single Product
+    This endpoint will return a Product based on it's id
+    """
+    app.logger.info("Request for product with id: %s", product_id)
+    product = Product.find(product_id)
+    if not product:
+        raise NotFound("Product with id '{}' was not found.".format(product_id))
+    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
+
+######################################################################
 # CREATE A NEW PRODUCT
 ######################################################################
 @app.route("/products", methods=["POST"])
-def create_products():
+def create_product():
     """
     Creates a Product
     This endpoint will create a Product based the data in the body that is posted
@@ -118,8 +155,7 @@ def create_products():
     product.deserialize(request.get_json())
     product.create()
     message = product.serialize()
-    #location_url = url_for("get_products", product_id=product.id, _external=True)
-    location_url = "not implemented"
+    location_url = url_for("get_products", product_id=product.id, _external=True)
     return make_response(
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
