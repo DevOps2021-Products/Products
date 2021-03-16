@@ -5,8 +5,10 @@ Test cases for Product Model
 import logging
 import unittest
 import os
+from werkzeug.exceptions import NotFound
 from service.models import Product, DataValidationError, db
 from service import app
+from .factories import ProductFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
@@ -140,6 +142,37 @@ class TestProduct(unittest.TestCase):
         self.assertNotEqual(product.id, None)
         products = Product.all()
         self.assertEqual(len(products), 1)
+
+    def test_find_product(self):
+        """ Find a Product by ID """
+        products = ProductFactory.create_batch(3)
+        for product in products:
+            product.create()
+        logging.debug(product)
+        # make sure they got saved
+        self.assertEqual(len(Product.all()), 3)
+        # find the 2nd product in the list
+        product = Product.find(products[1].id)
+        self.assertIsNot(product, None)
+        self.assertEqual(product.id, products[1].id)
+        self.assertEqual(product.name, products[1].name)
+        self.assertEqual(product.stock_status, products[1].stock_status)
+
+    def test_find_or_404_found(self):
+        """ Find or return 404 found """
+        products = ProductFactory.create_batch(3)
+        for product in products:
+            product.create()
+
+        product = Product.find_or_404(products[1].id)
+        self.assertIsNot(product, None)
+        self.assertEqual(product.id, products[1].id)
+        self.assertEqual(product.name, products[1].name)
+        self.assertEqual(product.stock_status, products[1].stock_status)
+
+    def test_find_or_404_not_found(self):
+        """ Find or return 404 NOT found """
+        self.assertRaises(NotFound, Product.find_or_404, 0)
 
     def test_delete_a_product(self):
         """ Delete a Product """

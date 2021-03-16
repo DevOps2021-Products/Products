@@ -32,7 +32,7 @@ class Product(db.Model):
     long_description = db.Column(db.String(100))
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer)
-    stock_status = db.Column(db.Boolean)
+    stock_status = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
