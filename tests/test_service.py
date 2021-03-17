@@ -9,9 +9,11 @@ import os
 import logging
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
+from urllib.parse import quote_plus
 from flask_api import status  # HTTP Status Codes
 from service.models import db, Product
 from service.routes import app, init_db
+from .factories import ProductFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgres://postgres:postgres@localhost:5432/postgres"
@@ -55,6 +57,23 @@ class TestProductServer(TestCase):
             stock_status=True
         )
 
+    def _create_products(self, count):
+        """ Factory method to create products in bulk """
+        products = []
+        for _ in range(count):
+            test_product = ProductFactory()
+            resp = self.app.post(
+                "/products", json=test_product.serialize(), content_type="application/json"
+            )
+            self.assertEqual(
+                resp.status_code, status.HTTP_201_CREATED, "Could not create test product"
+            )
+            new_product = resp.get_json()
+            test_product.id = new_product["id"]
+            products.append(test_product)
+        return products
+
+
 ######################################################################
 #  P L A C E   T E S T   C A S E S   H E R E 
 ######################################################################
@@ -90,6 +109,36 @@ class TestProductServer(TestCase):
         """ Get a Product thats not found """
         resp = self.app.get("/products/0")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_query_product_list_by_name(self):
+        """ Query Products by Name """
+        products = self._create_products(10)
+        test_name = products[0].name
+        name_products = [product for product in products if product.name == test_name]
+        resp = self.app.get(
+            "/products", query_string="name={}".format(quote_plus(test_name))
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(name_products))
+        # check the data just to be sure
+        for product in data:
+            self.assertEqual(product["name"], test_name)
+
+    def test_query_product_list_by_category(self):
+        """ Query Products by Category """
+        products = self._create_products(10)
+        test_category = products[0].category
+        category_products = [product for product in products if product.category == test_category]
+        resp = self.app.get(
+            "/products", query_string="category={}".format(quote_plus(test_category))
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(category_products))
+        # check the data just to be sure
+        for product in data:
+            self.assertEqual(product["category"], test_category)
 
     def test_create_product(self):
         """ Create a new Product """
@@ -139,7 +188,7 @@ class TestProductServer(TestCase):
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        # update the pet
+        # update the product
         new_product = resp.get_json()
         logging.debug(new_product)
         new_product["category"] = "unknown"
@@ -151,6 +200,14 @@ class TestProductServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_product = resp.get_json()
         self.assertEqual(updated_product["category"], "unknown")
+
+    def test_update_no_product(self):
+        """ Update a Product without an ID """
+        resp = self.app.put(
+            "/products/{}".format(123),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_product(self):
         """ Delete a Product """
@@ -166,3 +223,19 @@ class TestProductServer(TestCase):
             "/products/{}".format(test_product.id), content_type="application/json"
         )
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_invalid_content_type(self):
+        """ Test an invalid content type """
+        test_product = self._create_product()
+        test_product.create()
+        resp = self.app.post(
+            "/products", json=test_product.serialize(), content_type="test/"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+    def test_bad_request(self):
+        """ Test a bad request """
+        resp = self.app.post(
+            "/products", json={"test": "test"}, content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
