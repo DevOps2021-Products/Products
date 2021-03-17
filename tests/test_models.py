@@ -174,6 +174,26 @@ class TestProduct(unittest.TestCase):
         """ Find or return 404 NOT found """
         self.assertRaises(NotFound, Product.find_or_404, 0)
 
+    def test_update_a_product(self):
+        """ Update a Product """
+        product = ProductFactory()
+        logging.debug(product)
+        product.create()
+        logging.debug(product)
+        self.assertEqual(product.id, 1)
+        # Change it an save it
+        product.category = "food"
+        original_id = product.id
+        product.save()
+        self.assertEqual(product.id, original_id)
+        self.assertEqual(product.category, "food")
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].id, 1)
+        self.assertEqual(products[0].category, "food")
+
     def test_delete_a_product(self):
         """ Delete a Product """
         product = self._create_product()

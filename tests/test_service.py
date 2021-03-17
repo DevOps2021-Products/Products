@@ -129,6 +129,29 @@ class TestProductServer(TestCase):
         # self.assertEqual(new_product["rating"], test_product.rating)
         # self.assertEqual(new_product["stock_status"], test_product.stock_status)
 
+    def test_update_product(self):
+        """ Update an existing Product """
+        # create a product to update
+        test_product = self._create_product()
+        test_product.create()
+        resp = self.app.post(
+            "/products", json=test_product.serialize(), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # update the pet
+        new_product = resp.get_json()
+        logging.debug(new_product)
+        new_product["category"] = "unknown"
+        resp = self.app.put(
+            "/products/{}".format(new_product["id"]),
+            json=new_product,
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_product = resp.get_json()
+        self.assertEqual(updated_product["category"], "unknown")
+
     def test_delete_product(self):
         """ Delete a Product """
         test_product = self._create_product()
