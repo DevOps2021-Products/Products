@@ -7,6 +7,45 @@ This endpoint will allow you to create, query, update and delete a product from 
 
 All responses are in JSON format.
 
+## Installation Instructions
+
+This service uses **Vagrant** and **VirtualBox**. Please download and install it if you don't already have it.
+
+[VirtualBox](https://www.virtualbox.org/)
+
+[Vagrant](https://www.vagrantup.com/)
+
+After you clone the repo, spin up a vagrant instance:
+
+```bash
+    git clone https://github.com/DevOps2021-Products/products.git
+    cd products
+    vagrant up
+    vagrant ssh
+    cd /vagrant
+    FLASK_APP=service:app flask run -h 0.0.0.0
+```
+
+You can set the environment variable FLASK_APP using a `.env` file. An example environment is located in the file `dot-env-example`.
+
+### Database Schema
+
+Database Used: PostgreSQL
+
+### Product:
+
+|  Column  |  Type  | Constraints  |
+| :---------: | :---------: | :------------: | 
+| id | Integer | Primary Key |
+| sku | Integer | |
+| name | String | |
+| category | String | |
+| short_description | String | |
+| long_description | String | |
+| price | Double | |
+| rating | Integer | |
+| stock_status | Boolean | |
+
 ## URL
 https://products/
 
