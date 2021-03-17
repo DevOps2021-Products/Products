@@ -52,10 +52,7 @@ Run the tests using nosetests
 nosetests
 ```
 If your bash shell supports colors, you will see passing tests in green and failing tests in red.
-Nose will automatically run the coverage tool and present a percentage of coverage report when the tests are completed. To see lines of code that were not tested use:
-```bash
-coverage report -m
-```
+Running Nose automatically runs a coverage tool and presents a coverage report. This report indicates the percentage of the code that was tested and will appear once the tests have finished. Lines of code that were untested will appear next to the percentage of coverage.
 
 ## Supported Methods
 
