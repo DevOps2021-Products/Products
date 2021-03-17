@@ -18,12 +18,12 @@ This service uses **Vagrant** and **VirtualBox**. Please download and install if
 After you clone the repo, spin up a vagrant instance:
 
 ```bash
-    git clone https://github.com/DevOps2021-Products/products.git
-    cd products
-    vagrant up
-    vagrant ssh
-    cd /vagrant
-    FLASK_APP=service:app flask run -h 0.0.0.0
+git clone https://github.com/DevOps2021-Products/products.git
+cd products
+vagrant up
+vagrant ssh
+cd /vagrant
+FLASK_APP=service:app flask run -h 0.0.0.0
 ```
 
 Shutting down vagrant
