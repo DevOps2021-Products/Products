@@ -1,4 +1,4 @@
-# products
+# Products Service
 
 
 This is the repo for the products functionality. 
