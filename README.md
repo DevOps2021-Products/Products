@@ -32,7 +32,7 @@ You can set the environment variable FLASK_APP using a `.env` file. An example e
 
 Database Used: PostgreSQL
 
-### Product:
+### Product Data Model:
 
 |  Column  |  Type  | Constraints  |
 | :---------: | :---------: | :------------: | 
@@ -46,8 +46,16 @@ Database Used: PostgreSQL
 | rating | Integer | |
 | stock_status | Boolean | |
 
-## URL
-https://products/
+### Testing
+Run the tests using nosetests
+```bash
+nosetests
+```
+If your bash shell supports colors, you will see passing tests in green and failing tests in red.
+Nose will automatically run the coverage tool and present a percentage of coverage report when the tests are completed. To see lines of code that were not tested use:
+```bash
+coverage report -m
+```
 
 ## Supported Methods
 
