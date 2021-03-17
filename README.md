@@ -9,7 +9,7 @@ All responses are in JSON format.
 
 ## Installation Instructions
 
-This service uses **Vagrant** and **VirtualBox**. Please download and install it if you don't already have it.
+This service uses **Vagrant** and **VirtualBox**. Please download and install if it is not already installed on your machine.
 
 [VirtualBox](https://www.virtualbox.org/)
 
@@ -24,6 +24,12 @@ After you clone the repo, spin up a vagrant instance:
     vagrant ssh
     cd /vagrant
     FLASK_APP=service:app flask run -h 0.0.0.0
+```
+
+Shutting down vagrant
+``` bash
+exit
+vagrant halt
 ```
 
 You can set the environment variable FLASK_APP using a `.env` file. An example environment is located in the file `dot-env-example`.
