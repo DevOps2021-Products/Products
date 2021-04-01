@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DevOps2021-Products/products.svg?branch=main)](https://travis-ci.org/DevOps2021-Products/products)
+
 # Products Service
 
 
