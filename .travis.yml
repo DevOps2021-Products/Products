@@ -1,18 +1,13 @@
 language: python
 python:
   - "3.6"
-
 # command to install dependencies
 install: "pip install -r requirements.txt"
-
-# commands to run tests
+# command to run tests
 before_script: redis-cli ping
-
 script:
   - nosetests
-
 #after_success:
-#  - codecov
-
+# - codecov
 services:
   - redis-server
