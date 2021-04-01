@@ -7,8 +7,8 @@ install: "pip install -r requirements.txt"
 before_script: redis-cli ping
 script:
   - nosetests
-#after_success:
-# - codecov
+after_success:
+- codecov
 services:
   - redis-server
   - postgresql
