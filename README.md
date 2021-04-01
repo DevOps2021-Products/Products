@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/DevOps2021-Products/products.svg?branch=main)](https://travis-ci.org/DevOps2021-Products/products)
 [![codecov](https://codecov.io/gh/DevOps2021-Products/products/branch/main/graph/badge.svg?token=2QKL57K87B)](https://codecov.io/gh/DevOps2021-Products/products)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Products Service
 
