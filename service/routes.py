@@ -104,7 +104,14 @@ def internal_server_error(error):
 @app.route("/")
 def index():
     """ Root URL response """
-    return {"message": "Hello World"}, status.HTTP_200_OK
+    return (
+        jsonify(
+            name="Products REST API Service",
+            version="1.0",
+            information="https://github.com/DevOps2021-Products/products"
+        ),
+        status.HTTP_200_OK
+    )
 
 ######################################################################
 # LIST ALL PRODUCTS
