@@ -140,6 +140,21 @@ class TestProductServer(TestCase):
         for product in data:
             self.assertEqual(product["category"], test_category)
 
+    def test_query_products_list_by_stock_status(self):
+        """Query Products by Stock Status"""
+        products = self._create_products(10)
+        test_stock_status = products[0].stock_status
+        stock_status_products = [product for product in products if product.stock_status == test_stock_status]
+        resp = self.app.get(
+            "/products", query_string="stock_status={}".format(test_stock_status)
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(stock_status_products))
+        # check the data
+        for product in data:
+            self.assertEqual(product["stock_status"], test_stock_status)
+
     def test_create_product(self):
         """ Create a new Product """
         test_product = self._create_product()

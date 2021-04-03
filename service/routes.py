@@ -123,10 +123,13 @@ def list_products():
     products = []
     category = request.args.get("category")
     name = request.args.get("name")
+    stock_status = request.args.get("stock_status")
     if category:
         products = Product.find_by_category(category)
     elif name:
         products = Product.find_by_name(name)
+    elif stock_status:
+        products = Product.find_by_stock_status(stock_status)
     else:
         products = Product.all()
 
