@@ -143,3 +143,12 @@ class Product(db.Model):
         """
         logger.info("Processing category query for %s ...", category)
         return cls.query.filter(cls.category == category)
+
+    @classmethod
+    def find_by_stock_status(cls, stock_status):
+        """REturns all of the Products with the given stock status
+        Args:
+            stock_status (bool): the stock status of the Products you want to match
+        """
+        logger.info("Processing stock status query for %s ...", stock_status)
+        return cls.query.filter(cls.stock_status == stock_status)
