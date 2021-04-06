@@ -302,3 +302,23 @@ class TestProductServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_product = resp.get_json()
         self.assertEqual(updated_product["likes"], test_product.likes + 1)
+
+    def test_like_no_product(self):
+        """ Like an non-existing Product """
+        
+        # like the product
+        resp = self.app.put(
+                "/products/{}/like".format(456),
+                content_type="application/json",
+            )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_disable_no_product(self):
+        """ Disable an non-existing Product """
+        
+        # disable the product
+        resp = self.app.put(
+                "/products/{}/disable".format(456),
+                content_type="application/json",
+            )
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
