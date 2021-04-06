@@ -254,3 +254,26 @@ class TestProductServer(TestCase):
             "/products", json={"test": "test"}, content_type="application/json"
         )
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+def test_disable_product(self):
+        """ Disable an existing Product """
+        # create a product to disable
+        test_product = self._create_product()
+        test_product.create()
+        resp = self.app.post(
+            "/products", json=test_product.serialize(), content_type="application/json"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        # disable the product
+        new_product = resp.get_json()
+        logging.debug(new_product)
+        new_product["category"] = "unknown"
+        resp = self.app.put(
+            "/products/{}/disable".format(new_product["id"]),
+            json=new_product,
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        updated_product = resp.get_json()
+        self.assertEqual(updated_product["category"], "unknown")

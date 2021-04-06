@@ -207,7 +207,50 @@ def delete_products(product_id):
     if product:
         product.delete()
     return make_response("", status.HTTP_204_NO_CONTENT)
-    
+
+
+######################################################################
+# DISABLE A PRODUCT
+######################################################################
+@app.route("/products/<int:product_id>/disable", methods=["PUT"])
+def disable_products(product_id):
+    """
+    Disable a Product
+    This endpoint will disable a Product based the body that is posted
+    """
+    app.logger.info("Request to disable product with id: %s", product_id)
+    check_content_type("application/json")
+    product = Product.find(product_id)
+    if not product:
+        raise NotFound("Product with id '{}' was not found.".format(product_id))
+    product.deserialize(request.get_json())
+    product.id = product_id
+    product.enabled = False
+    # TODO to send a message to the warehouse and shopping cart service to take action 
+    product.save()
+    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
+
+
+######################################################################
+# LIKE A PRODUCT
+######################################################################
+@app.route("/products/<int:product_id>/like", methods=["PUT"])
+def disable_products(product_id):
+    """
+    Like a Product
+    This endpoint will like a Product based the body that is posted
+    """
+    app.logger.info("Request to like product with id: %s", product_id)
+    check_content_type("application/json")
+    product = Product.find(product_id)
+    if not product:
+        raise NotFound("Product with id '{}' was not found.".format(product_id))
+    product.deserialize(request.get_json())
+    product.id = product_id
+    product.likes += 1 
+    product.save()
+    return make_response(jsonify(product.serialize()), status.HTTP_200_OK)
+ 
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S

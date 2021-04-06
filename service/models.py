@@ -33,6 +33,8 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer)
     stock_status = db.Column(db.Boolean, nullable=False)
+    enabled = db.Column(db.Boolean, nullable=False)
+    likes = db.Column(db.Integer)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
@@ -70,7 +72,9 @@ class Product(db.Model):
             "long_description": self.long_description,
             "price": self.price,
             "rating": self.rating,
-            "stock_status": self.stock_status
+            "stock_status": self.stock_status,
+            "enabled": self.enabled,
+            "likes": self.likes
         }
 
     def deserialize(self, data):
@@ -89,6 +93,8 @@ class Product(db.Model):
             self.price = data["price"]
             self.rating = data.get("rating")
             self.stock_status = data.get("stock_status")
+            self.enabled = data.get("enabled")
+            self.likes = data.get("likes")
         except KeyError as error:
             raise DataValidationError("Invalid Product: missing " + error.args[0])
         except TypeError as error:
