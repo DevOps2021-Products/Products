@@ -20,3 +20,5 @@ class ProductFactory(factory.Factory):
     price = FuzzyChoice(choices=[100, 10000, 500, 750])
     short_description = FuzzyChoice(choices=["the tastiest food", "the fastest computer", "the shinest new phones", "the tools you need for the job"])
     rating = FuzzyChoice(choices=[1, 2, 3, 4, 5])
+    enabled = FuzzyChoice(choices=[True, False])
+    likes = FuzzyChoice(choices=[0, 1, 5, 100, 10000, 500, 750])

@@ -46,6 +46,8 @@ class TestProductServer(TestCase):
         db.drop_all()
 
     def _create_product(self):
+        # TODO Replace with create products once all test cases are update to reflect non fixed values
+        # return _create_products(1)
         return Product(
             sku=12345,
             name="ABCchocolate", 
@@ -54,7 +56,9 @@ class TestProductServer(TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price=28,
             rating=4, 
-            stock_status=True
+            stock_status=True,
+            enabled = True, 
+            likes = 10
         )
 
     def _create_products(self, count):
@@ -255,25 +259,46 @@ class TestProductServer(TestCase):
         )
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
-def test_disable_product(self):
-        """ Disable an existing Product """
-        # create a product to disable
-        test_product = self._create_product()
+    def test_disable_product(self):
+            """ Disable an existing Product """
+            # create a product to disable
+            test_product = self._create_products(1)[0]
+            test_product.create()
+            resp = self.app.post(
+                "/products", json=test_product.serialize(), content_type="application/json"
+            )
+            self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+            # disable the product
+            new_product = resp.get_json()
+            logging.debug(new_product)
+            resp = self.app.put(
+                "/products/{}/disable".format(new_product["id"]),
+                json=new_product,
+                content_type="application/json",
+            )
+            self.assertEqual(resp.status_code, status.HTTP_200_OK)
+            updated_product = resp.get_json()
+            self.assertEqual(updated_product["enabled"], False)
+
+    def test_like_product(self):
+        """ Like an existing Product """
+        # create a product to like
+        test_product = self._create_products(1)[0]
         test_product.create()
         resp = self.app.post(
             "/products", json=test_product.serialize(), content_type="application/json"
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        # disable the product
+        # like the product
         new_product = resp.get_json()
         logging.debug(new_product)
-        new_product["category"] = "unknown"
         resp = self.app.put(
-            "/products/{}/disable".format(new_product["id"]),
+            "/products/{}/like".format(new_product["id"]),
             json=new_product,
             content_type="application/json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_product = resp.get_json()
-        self.assertEqual(updated_product["category"], "unknown")
+        self.assertEqual(updated_product["likes"], test_product.likes + 1)

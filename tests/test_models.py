@@ -49,7 +49,9 @@ class TestProduct(unittest.TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
             rating="4", 
-            stock_status=True
+            stock_status=True,
+            enabled = True,
+            likes = 10
         )
 
 ######################################################################
@@ -70,6 +72,8 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(product.price, "28")
         self.assertEqual(product.rating, "4")
         self.assertEqual(product.stock_status, True)
+        self.assertEqual(product.enabled, True)
+        self.assertEqual(product.likes, 10)
 
         # Test product without long description
         product = Product(
@@ -79,7 +83,9 @@ class TestProduct(unittest.TestCase):
             short_description="dark chocolate",
             price="28",
             rating="4", 
-            stock_status=True
+            stock_status=True,
+            enabled = True,
+            likes = 10
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
@@ -93,7 +99,9 @@ class TestProduct(unittest.TestCase):
             short_description="dark chocolate",
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
-            stock_status=True
+            stock_status=True,
+            enabled = True,
+            likes = 10
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
@@ -107,7 +115,9 @@ class TestProduct(unittest.TestCase):
             short_description="dark chocolate",
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
-            rating="4"
+            rating="4",
+            enabled = True,
+            likes = 10
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
@@ -122,7 +132,9 @@ class TestProduct(unittest.TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
             rating="4", 
-            stock_status=False
+            stock_status=False,
+            enabled = True,
+            likes = 10
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)

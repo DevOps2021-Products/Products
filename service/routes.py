@@ -235,7 +235,7 @@ def disable_products(product_id):
 # LIKE A PRODUCT
 ######################################################################
 @app.route("/products/<int:product_id>/like", methods=["PUT"])
-def disable_products(product_id):
+def like_products(product_id):
     """
     Like a Product
     This endpoint will like a Product based the body that is posted
