@@ -1,14 +1,57 @@
+sudo: required
+
 language: python
 python:
-  - "3.6"
-# command to install dependencies
-install: "pip install -r requirements.txt"
-# command to run tests
-before_script: redis-cli ping
-script:
-  - nosetests
-after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - '3.8'
+
 services:
+  - docker
   - redis-server
   - postgresql
+
+# We need to run our own postgresdb because Travis doesn't use credentials
+before_install:
+  - docker pull postgres:alpine
+  - docker run -d --name postgres -p 5432:5432 -v psql_data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=postgres
+    postgres:latest
+  - docker ps -a
+
+before_script: redis-cli ping
+
+env:
+  - BINDING_CLOUDANT='{"username":"admin","password":"pass","host":"localhost","port":5984,"url":"http://admin:pass@localhost:5984"}'
+
+# command to install dependencies
+install: 
+  - pip install -r requirements.txt
+
+# command to run tests
+jobs:
+  include:
+    - stage: Test
+      name: TDD
+      script: nosetests
+
+    - stage: Test
+      name: BDD
+      addons:
+        chrome: stable
+        apt:
+          packages:
+            - chromium-chromedriver 
+            - python3-selenium
+      before_script:
+        - chromedriver --version
+        - curl -X GET http://localhost:5984/
+        - curl -X PUT http://admin:pass@localhost:5984/test
+        - gunicorn --log-level=critical --bind=127.0.0.1:8080 service:app &  # start a Web server in the background
+        - sleep 5 # give Web server some time to bind to sockets, etc
+        - curl -I http://localhost:8080/  # make sure the service is up
+      script:
+        - behave
+
+after_success:
+  - codecov
+  - bash <(curl -s https://codecov.io/bash)
+
+
