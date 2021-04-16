@@ -19,7 +19,7 @@ before_install:
 before_script: redis-cli ping
 
 env:
-  - BINDING_CLOUDANT='{"username":"admin","password":"pass","host":"localhost","port":5984,"url":"http://admin:pass@localhost:5984"}'
+  - BINDING_CLOUDANT='{"username":"admin","password":"pass","host":"localhost","port":5000,"url":"http://admin:pass@localhost:5000"}'
 
 # command to install dependencies
 install: 
