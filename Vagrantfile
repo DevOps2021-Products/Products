@@ -8,7 +8,7 @@
 Vagrant.configure(2) do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "bento/ubuntu-20.04"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.hostname = "ubuntu"
 
   # accessing "localhost:8080" will access port 80 on the guest machine.
@@ -41,7 +41,7 @@ Vagrant.configure(2) do |config|
   ############################################################
   config.vm.provider :docker do |docker, override|
     override.vm.box = nil
-    docker.image = "rofrano/vagrant-provider:ubuntu"
+    docker.image = "rofrano/vagrant-provider:debian"
     docker.remains_running = true
     docker.has_ssh = true
     docker.privileged = true
@@ -101,22 +101,25 @@ Vagrant.configure(2) do |config|
   ######################################################################
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y git tree wget vim python3-dev python3-pip python3-venv apt-transport-https
-    apt-get upgrade python3
-    pip3 install -U pip
-    # Update pip and wheel so Python packages build correctly
-    pip3 install wheel
+    apt-get install -y git tree wget vim jq python3-dev python3-pip python3-venv python3-selenium
+    apt-get -y autoremove
+
+    # Install Chromium Driver
+    apt-get install -y chromium-chromedriver
+    
     # Create a Python3 Virtual Environment and Activate it in .profile
     sudo -H -u vagrant sh -c 'python3 -m venv ~/venv'
     sudo -H -u vagrant sh -c 'echo ". ~/venv/bin/activate" >> ~/.profile'
-    sudo -H -u vagrant sh -c '. ~/venv/bin/activate && pip3 install wheel && cd /vagrant && pip install -r requirements.txt'
-    
+
+    # Install app dependencies
+    sudo -H -u vagrant sh -c '. ~/venv/bin/activate && pip install wheel'
+    sudo -H -u vagrant sh -c '. ~/venv/bin/activate && cd /vagrant && pip install -r requirements.txt'
   SHELL
 
   ######################################################################
   # Add CouchDB docker container
   ######################################################################
-  # docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass couchdb
+  # docker run -d --name couchdb -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=pass -v couchdb-data:/opt/couchdb/data couchdb
   config.vm.provision "docker" do |d|
     d.pull_images "couchdb"
     d.run "couchdb",
@@ -131,22 +134,28 @@ Vagrant.configure(2) do |config|
     echo " Installing IBM Cloud CLI..."
     echo "************************************\n"
     # Install IBM Cloud CLI as Vagrant user
-    sudo -H -u vagrant sh -c 'curl -sL http://ibm.biz/idt-installer | bash'
-    sudo -H -u vagrant sh -c "echo 'source <(kubectl completion bash)' >> ~/.bashrc"
-    # sudo -H -u vagrant sh -c "ibmcloud cf install --version 6.46.1"
-    sudo -H -u vagrant sh -c "ibmcloud cf install"
+    sudo -H -u vagrant sh -c '
+    wget -O bluemix-cli.tar.gz https://clis.cloud.ibm.com/download/bluemix-cli/1.4.0/linux64 && \
+    tar xzf bluemix-cli.tar.gz && \
+    cd Bluemix_CLI/ && \
+    ./install && \
+    cd .. && \
+    rm -fr Bluemix_CLI/ bluemix-cli.tar.gz && \
+    ibmcloud cf install
+    '
     sudo -H -u vagrant sh -c "echo alias ic=/usr/local/bin/ibmcloud >> ~/.bash_aliases"
     echo "\n************************************"
+    echo ""
     echo "If you have an IBM Cloud API key in ~/.bluemix/apiKey.json"
     echo "You can login with the following command:"
-    echo "\n"
+    echo ""
     echo "ibmcloud login -a https://cloud.ibm.com --apikey @~/.bluemix/apiKey.json -r us-south"
-    echo "ibmcloud target --cf -o <your_org_here> -s dev"
+    echo "\nibmcloud target -o [your-org] -s dev"
     echo "\n************************************"
     # Show the GUI URL for Couch DB
     echo "\n"
     echo "CouchDB Admin GUI can be found at:\n"
-    echo "http://127.0.0.1:5984/_utils"    
+    echo "http://127.0.0.1:5984/_utils"
   SHELL
 
 end
