@@ -12,8 +12,8 @@ services:
 # We need to run our own postgresdb because Travis doesn't use credentials
 before_install:
   - docker pull postgres:alpine
-  - docker run -d --name postgres -p 5432:5432 -v psql_data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=postgres
-    postgres:latest
+  # - docker run -d --name postgres -p 5432:5432 -v psql_data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=postgres
+  #   postgres:latest
   - docker ps -a
 
 before_script: redis-cli ping
