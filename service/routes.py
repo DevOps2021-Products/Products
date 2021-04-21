@@ -98,20 +98,22 @@ def internal_server_error(error):
     )
 
 ######################################################################
+# GET HEALTH CHECK
+######################################################################
+
+@app.route('/healthcheck')
+def healthcheck():
+    """ Let them know our heart is still beating """
+    return make_response(jsonify(status=200, message='Healthy'), status.HTTP_200_OK)
+
+######################################################################
 # GET INDEX
 ######################################################################
 
 @app.route("/")
 def index():
     """ Root URL response """
-    return (
-        jsonify(
-            name="Products REST API Service",
-            version="1.0",
-            information="https://github.com/DevOps2021-Products/products"
-        ),
-        status.HTTP_200_OK
-    )
+    return app.send_static_file('index.html')
 
 ######################################################################
 # LIST ALL PRODUCTS

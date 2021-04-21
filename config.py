@@ -3,6 +3,10 @@ Global Configuration for Application
 """
 import os
 import json
+import logging
+
+SECRET_KEY = 'secret-for-dev'
+LOGGING_LEVEL = logging.INFO
 
 # Get configuration from environment
 DATABASE_URI = os.getenv(
