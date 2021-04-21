@@ -35,14 +35,28 @@ $(function () {
 
     $("#create-btn").click(function () {
 
+        var sku = $("#product_sku").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+        var short_description = $("#product_short_description").val();
+        var long_description = $("#product_long_description").val();
+        var price = $("#product_price").val();
+        var rating = $("#product_rating").val();
+        var stock_status = $("#product_stock_status").val() == "true";
+        var enabled = $("#product_enabled").val() == "true";
+        var likes = $("#product_likes").val();
 
         var data = {
+            "sku": sku,
             "name": name,
             "category": category,
-            "available": available
+            "short_description": short_description,
+            "long_description": long_description,
+            "price": price,
+            "rating": rating,
+            "stock_status": stock_status,
+            "enabled": enabled,
+            "likes": likes
         };
 
         var ajax = $.ajax({

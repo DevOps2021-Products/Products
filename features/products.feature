@@ -13,7 +13,7 @@ Background:
 Scenario: The server is running
     When I visit the "Home Page"
     Then I should see "Product Demo RESTful Service" in the title
-    And I should not see "404 Not Found"
+    Then I should not see "404 Not Found"
 
 Scenario: Create a Product Successfully
     When I visit the "Home Page"
@@ -22,7 +22,7 @@ Scenario: Create a Product Successfully
     And I set the "Category" to "Fitness"
     And I set the "Short Description" to "Exercise bike with digital display"
     And I set the "Price" to "1000"
-    And I select "True" in the "Stock Status" dropdown
+    And I select "True" in the "Available" dropdown
     And I select "True" in the "Enabled" dropdown
     And I press the "Create" button
     Then I should see the message "Success"
@@ -52,7 +52,7 @@ Scenario: Create a Product Successfully
     And I set the "Name" to "Peloton Bike"
     And I set the "Short Description" to "Exercise bike with digital display"
     And I set the "Price" to "1000"
-    And I select "True" in the "Stock Status" dropdown
+    And I select "True" in the "Available" dropdown
     And I select "True" in the "Enabled" dropdown
     And I press the "Create" button
     Then I should see the message "Error"
