@@ -98,6 +98,15 @@ def internal_server_error(error):
     )
 
 ######################################################################
+# GET HEALTH CHECK
+######################################################################
+
+@app.route('/healthcheck')
+def healthcheck():
+    """ Let them know our heart is still beating """
+    return make_response(jsonify(status=200, message='Healthy'), status.HTTP_200_OK)
+
+######################################################################
 # GET INDEX
 ######################################################################
 

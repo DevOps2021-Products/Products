@@ -21,6 +21,14 @@ $(function () {
         $("#product_name").val("");
         $("#product_category").val("");
         $("#product_available").val("");
+        $("#product_sku").val("");
+        $("#product_short_description").val("");
+        $("#product_long_description").val("");
+        $("#product_price").val("");
+        $("#product_rating").val("");
+        $("#product_stock_status").val("");
+        $("#product_enabled").val("");
+        $("#product_likes").val("");
     }
 
     // Updates the flash message area
