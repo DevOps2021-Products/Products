@@ -5,7 +5,7 @@ Feature: The Product store service back-end
 
 Background:
     Given the following Products
-        | sku | name       | category | short description | price | stock status | enabled |
+        | sku | name       | category | short_description | price | stock_status | enabled |
         | 001 | iPhone     | phone    | Apple iphone      | 100   | true         | false   |
         | 002 | MacBook    | computer | Apple laptop      | 200   | true         | true    |
         | 003 | Surface    | computer | Microsoft Laptop  | 300   | false        | true    |

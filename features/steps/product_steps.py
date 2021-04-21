@@ -32,9 +32,13 @@ def step_impl(context):
     create_url = context.base_url + '/products'
     for row in context.table:
         data = {
+            "sku": row['sku'],
             "name": row['name'],
             "category": row['category'],
-            "available": row['available'] in ['True', 'true', '1']
+            "short_description": row['short_description'],
+            "price": row['price'],
+            "stock_status": row['stock_status'] in ['True', 'true', '1'],
+            "enabled": row['enabled'] in ['True', 'true', '1']
             }
         payload = json.dumps(data)
         context.resp = requests.post(create_url, data=payload, headers=headers)
