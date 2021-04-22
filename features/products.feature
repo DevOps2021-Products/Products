@@ -66,15 +66,33 @@ Scenario: List all Products
     And I should see "MacBook" in the results
     And I should not see "Airpods" in the results
 
+Scenario: Search for iPhone
+    When I visit the "Home Page"
+    And I set the "Name" to "iPhone"
+    And I press the "Search" button
+    Then I should see "iPhone" in the results
+
+Scenario: Search for computer
+    When I visit the "Home Page"
+    And I set the "Category" to "computer"
+    And I press the "Search" button
+    Then I should see "iPhone" in the results
+    Then I should see "MacBook" in the results
+
+Scenario: Search for available
+    When I visit the "Home Page"
+    And I select "True" in the "Available" dropdown
+    And I press the "Search" button
+    Then I should see "MacBook" in the results
+    Then I should see "Surface" in the results
+
 Scenario: Delete a Product
     When I visit the "Home Page"
     And I set the "ID" to "003"
     And I press the "Search" button
-    Then I should see "003" in the "Sku" field
+    Then I should see "003" in the "ID" field
     And I should see "Surface" in the "Name" field
-    And I set the "Price" to "1000"
-    And I set the "Rating" to "5"
-    When I press the "  " button
+    When I press the "Delete" button
     Then I should see the message "Deleted"
 
 # Scenario: Update a Product

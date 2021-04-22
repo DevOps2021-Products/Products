@@ -56,7 +56,7 @@ class TestProductServer(TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price=28,
             rating=4, 
-            stock_status=True,
+            available=True,
             enabled = True, 
             likes = 10
         )
@@ -144,20 +144,20 @@ class TestProductServer(TestCase):
         for product in data:
             self.assertEqual(product["category"], test_category)
 
-    def test_query_products_list_by_stock_status(self):
-        """Query Products by Stock Status"""
+    def test_query_products_list_by_available(self):
+        """Query Products by Available"""
         products = self._create_products(10)
-        test_stock_status = products[0].stock_status
-        stock_status_products = [product for product in products if product.stock_status == test_stock_status]
+        test_available = products[0].available
+        available_products = [product for product in products if product.available == test_available]
         resp = self.app.get(
-            "/products", query_string="stock_status={}".format(test_stock_status)
+            "/products", query_string="available={}".format(test_available)
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
-        self.assertEqual(len(data), len(stock_status_products))
+        self.assertEqual(len(data), len(available_products))
         # check the data
         for product in data:
-            self.assertEqual(product["stock_status"], test_stock_status)
+            self.assertEqual(product["available"], test_available)
 
     def test_query_products_list_by_rating(self):
         """Query Products by Rating"""
@@ -196,7 +196,7 @@ class TestProductServer(TestCase):
         self.assertEqual(new_product["long_description"], test_product.long_description)
         self.assertEqual(new_product["price"], test_product.price)
         self.assertEqual(new_product["rating"], test_product.rating)
-        self.assertEqual(new_product["stock_status"], test_product.stock_status)
+        self.assertEqual(new_product["available"], test_product.available)
 
         # ToDo: Uncomment once retrieve product is implemented
         # # Check that the location header was correct

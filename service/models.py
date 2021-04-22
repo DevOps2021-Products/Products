@@ -32,7 +32,7 @@ class Product(db.Model):
     long_description = db.Column(db.String(100))
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer)
-    stock_status = db.Column(db.Boolean, nullable=False)
+    available = db.Column(db.Boolean, nullable=False)
     enabled = db.Column(db.Boolean, nullable=False)
     likes = db.Column(db.Integer)
 
@@ -72,7 +72,7 @@ class Product(db.Model):
             "long_description": self.long_description,
             "price": self.price,
             "rating": self.rating,
-            "stock_status": self.stock_status,
+            "available": self.available,
             "enabled": self.enabled,
             "likes": self.likes
         }
@@ -92,7 +92,7 @@ class Product(db.Model):
             self.long_description = data.get("long_description")
             self.price = data["price"]
             self.rating = data.get("rating")
-            self.stock_status = data.get("stock_status")
+            self.available = data.get("available")
             self.enabled = data.get("enabled")
             self.likes = data.get("likes")
         except KeyError as error:

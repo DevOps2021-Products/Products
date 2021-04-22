@@ -49,7 +49,7 @@ class TestProduct(unittest.TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
             rating="4", 
-            stock_status=True,
+            available=True,
             enabled = True,
             likes = 10
         )
@@ -71,7 +71,7 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(product.long_description, "lindts dark chocolate Christmas limited version")
         self.assertEqual(product.price, "28")
         self.assertEqual(product.rating, "4")
-        self.assertEqual(product.stock_status, True)
+        self.assertEqual(product.available, True)
         self.assertEqual(product.enabled, True)
         self.assertEqual(product.likes, 10)
 
@@ -83,7 +83,7 @@ class TestProduct(unittest.TestCase):
             short_description="dark chocolate",
             price="28",
             rating="4", 
-            stock_status=True,
+            available=True,
             enabled = True,
             likes = 10
         )
@@ -99,7 +99,7 @@ class TestProduct(unittest.TestCase):
             short_description="dark chocolate",
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
-            stock_status=True,
+            available=True,
             enabled = True,
             likes = 10
         )
@@ -107,7 +107,7 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(product.id, None)
         self.assertEqual(product.rating, None)
 
-        # Test product without stock_status
+        # Test product without available
         product = Product(
             sku="12345",
             name="ABCchocolate", 
@@ -121,9 +121,9 @@ class TestProduct(unittest.TestCase):
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
-        self.assertEqual(product.stock_status, None)
+        self.assertEqual(product.available, None)
 
-        # Test product with stock_status false
+        # Test product with available false
         product = Product(
             sku="12345",
             name="ABCchocolate", 
@@ -132,13 +132,13 @@ class TestProduct(unittest.TestCase):
             long_description="lindts dark chocolate Christmas limited version",
             price="28",
             rating="4", 
-            stock_status=False,
+            available=False,
             enabled = True,
             likes = 10
         )
         self.assertTrue(product != None)
         self.assertEqual(product.id, None)
-        self.assertEqual(product.stock_status, False)
+        self.assertEqual(product.available, False)
 
     def test_add_a_product(self):
         """ Create a product and add it to the database """
@@ -168,7 +168,7 @@ class TestProduct(unittest.TestCase):
         self.assertIsNot(product, None)
         self.assertEqual(product.id, products[1].id)
         self.assertEqual(product.name, products[1].name)
-        self.assertEqual(product.stock_status, products[1].stock_status)
+        self.assertEqual(product.available, products[1].available)
 
     def test_find_or_404_found(self):
         """ Find or return 404 found """
@@ -180,7 +180,7 @@ class TestProduct(unittest.TestCase):
         self.assertIsNot(product, None)
         self.assertEqual(product.id, products[1].id)
         self.assertEqual(product.name, products[1].name)
-        self.assertEqual(product.stock_status, products[1].stock_status)
+        self.assertEqual(product.available, products[1].available)
 
     def test_find_or_404_not_found(self):
         """ Find or return 404 NOT found """
