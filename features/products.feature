@@ -65,6 +65,9 @@ Scenario: Delete a Product
     And I press the "Search" button
     Then I should see "003" in the "Sku" field
     And I should see "Surface" in the "Name" field
+    When I copy the "Id" field                    
+    And I press the "Clear" button               
+    And I paste the "Id" field  
     When I press the "Delete" button
     Then I should see the message "Deleted"
   #  And I should see "kitty" in the results
