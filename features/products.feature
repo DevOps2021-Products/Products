@@ -22,8 +22,8 @@ Scenario: Create a Product Successfully
     And I set the "Category" to "Fitness"
     And I set the "Short Description" to "Exercise bike with digital display"
     And I set the "Price" to "1000"
-    And I set the "Rating" to "5"
-    And I set the "Likes" to "10"
+    # And I set the "Rating" to "5"
+    # And I set the "Likes" to "10"
     And I select "True" in the "Available" dropdown
     And I select "True" in the "Enabled" dropdown
     And I press the "Create" button
@@ -48,7 +48,7 @@ Scenario: Create a Product Successfully
     # And I should see "True" in the "Stock Status" dropdown
     # And I should see "True" in the "Enabled" dropdown
 
-    Scenario: Create a Product Unsuccessfully
+Scenario: Create a Product Unsuccessfully
     When I visit the "Home Page"
     And I set the "Sku" to "004"
     And I set the "Name" to "Peloton Bike"
@@ -62,33 +62,45 @@ Scenario: Create a Product Successfully
 Scenario: List all Products
     When I visit the "Home Page"
     And I press the "Search" button
-    Then I should see "fido" in the results
-    And I should see "kitty" in the results
-    And I should not see "leo" in the results
+    Then I should see "iPhone" in the results
+    And I should see "MacBook" in the results
+    And I should not see "Airpods" in the results
 
-Scenario: List all dogs
+Scenario: Delete a Product
     When I visit the "Home Page"
-    And I set the "Category" to "dog"
+    And I set the "ID" to "003"
     And I press the "Search" button
-    Then I should see "fido" in the results
-    And I should not see "kitty" in the results
-    And I should not see "leo" in the results
+    Then I should see "003" in the "Sku" field
+    And I should see "Surface" in the "Name" field
+    And I set the "Price" to "1000"
+    And I set the "Rating" to "5"
+    When I press the "  " button
+    Then I should see the message "Deleted"
 
-Scenario: Update a Product
-    When I visit the "Home Page"
-    And I set the "Name" to "fido"
-    And I press the "Search" button
-    Then I should see "fido" in the "Name" field
-    And I should see "dog" in the "Category" field
-    When I change "Name" to "Boxer"
-    And I press the "Update" button
-    Then I should see the message "Success"
-    When I copy the "Id" field
-    And I press the "Clear" button
-    And I paste the "Id" field
-    And I press the "Retrieve" button
-    Then I should see "Boxer" in the "Name" field
-    When I press the "Clear" button
-    And I press the "Search" button
-    Then I should see "Boxer" in the results
-    Then I should not see "fido" in the results
+# Scenario: Update a Product
+#     When I visit the "Home Page"
+#     And I set the "Name" to "fido"
+#     And I press the "Update" button
+#     Then I should see "fido" in the "Name" field
+#     And I should see "dog" in the "Category" field
+#     When I change "Name" to "Boxer"
+#     And I press the "Update" button
+#     Then I should see the message "Success"
+#     When I copy the "Id" field
+#     And I press the "Clear" button
+#     And I paste the "Id" field
+#     And I press the "Retrieve" button
+#     Then I should see "Boxer" in the "Name" field
+#     When I press the "Clear" button
+#     And I press the "Search" button
+#     Then I should see "Boxer" in the results
+#     Then I should not see "fido" in the results
+
+# Scenario: List all dogs
+#     When I visit the "Home Page"
+#     And I set the "Category" to "dog"
+#     And I press the "Search" button
+#     Then I should see "fido" in the results
+#     And I should not see "kitty" in the results
+#     And I should not see "leo" in the results
+
