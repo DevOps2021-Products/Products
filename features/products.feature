@@ -68,7 +68,7 @@ Scenario: Delete a Product
     When I copy the "Id" field                    
     And I press the "Clear" button               
     And I paste the "Id" field  
-    When I press the "Delete" button
+    And I press the "Delete" button
     Then I should see the message "Deleted"
   #  And I should see "kitty" in the results
   #  And I should not see "leo" in the results  When I visit the "Home Page"
