@@ -59,6 +59,21 @@ Scenario: Create a Product Successfully
     And I press the "Create" button
     Then I should see the message "Error"
 
+Scenario: Delete a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "Surface"
+    And I press the "Search" button
+    Then I should see "003" in the "Sku" field
+    And I should see "Surface" in the "Name" field
+    When I press the "Delete" button
+    Then I should see the message "Deleted"
+  #  And I should see "kitty" in the results
+  #  And I should not see "leo" in the results  When I visit the "Home Page"
+  #  And I press the "Search" button
+  #  Then I should see "fido" in the results
+  #  And I should see "kitty" in the results
+  #  And I should not see "leo" in the results
+
 Scenario: List all Products
     When I visit the "Home Page"
     And I press the "Search" button
@@ -92,3 +107,4 @@ Scenario: Update a Product
     And I press the "Search" button
     Then I should see "Boxer" in the results
     Then I should not see "fido" in the results
+
