@@ -151,13 +151,13 @@ class Product(db.Model):
         return cls.query.filter(cls.category == category)
 
     @classmethod
-    def find_by_stock_status(cls, stock_status):
-        """Returns all of the Products with the given stock status
+    def find_by_available(cls, available):
+        """Returns all of the Products with the given availability
         Args:
-            stock_status (bool): the stock status of the Products you want to match
+            available (bool): the availability of the Products you want to match
         """
-        logger.info("Processing stock status query for %s ...", stock_status)
-        return cls.query.filter(cls.stock_status == stock_status)
+        logger.info("Processing available query for %s ...", available)
+        return cls.query.filter(cls.available == available)
 
     @classmethod
     def find_by_rating(cls, rating):
