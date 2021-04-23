@@ -37,7 +37,7 @@ def step_impl(context):
             "category": row['category'],
             "short_description": row['short_description'],
             "price": row['price'],
-            "stock_status": row['stock_status'] in ['True', 'true', '1'],
+            "available": row['available'] in ['True', 'true', '1'],
             "enabled": row['enabled'] in ['True', 'true', '1']
             }
         payload = json.dumps(data)

@@ -14,6 +14,13 @@ $(function () {
         } else {
             $("#product_available").val("false");
         }
+        $("#product_sku").val(res.sku);
+        $("#product_short_description").val(res.short_description);
+        $("#product_available").val(res.available);
+        $("#product_price").val(res.price);
+        $("#product_rating").val(res.rating);
+        $("#product_long_description").val(res.long_description);
+        $("#product_likes").val(res.likes)
     }
 
     /// Clears all form fields
@@ -26,10 +33,10 @@ $(function () {
         $("#product_short_description").val("");
         $("#product_long_description").val("");
         $("#product_price").val("");
-        $("#product_rating").val("");
-        $("#product_stock_status").val("");
+        $("#product_rating").val(0);
+        $("#product_available").val("");
         $("#product_enabled").val("");
-        $("#product_likes").val("");
+        $("#product_likes").val(0);
     }
 
     // Updates the flash message area
@@ -51,7 +58,7 @@ $(function () {
         var long_description = $("#product_long_description").val();
         var price = $("#product_price").val();
         var rating = $("#product_rating").val();
-        var stock_status = $("#product_stock_status").val() == "true";
+        var available = $("#product_available").val() == "true";
         var enabled = $("#product_enabled").val() == "true";
         var likes = $("#product_likes").val();
 
@@ -62,10 +69,10 @@ $(function () {
             "short_description": short_description,
             "long_description": long_description,
             "price": price,
-            "rating": rating,
-            "stock_status": stock_status,
+            "rating": parseInt(rating),
+            "available": available,
             "enabled": enabled,
-            "likes": likes
+            "likes": parseInt(likes)
         };
 
         var ajax = $.ajax({
@@ -192,6 +199,7 @@ $(function () {
         var name = $("#product_name").val();
         var category = $("#product_category").val();
         var available = $("#product_available").val() == "true";
+        var rating = $("#product_rating").val();
 
         var queryString = ""
 
@@ -210,6 +218,13 @@ $(function () {
                 queryString += '&available=' + available
             } else {
                 queryString += 'available=' + available
+            }
+        }
+        if (rating) {
+            if (queryString.length > 0) {
+                queryString += '&rating=' + rating
+            } else {
+                queryString += 'rating=' + rating
             }
         }
 
