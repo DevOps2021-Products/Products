@@ -5,36 +5,70 @@ All of the models are stored in this module
 """
 import logging
 from flask_sqlalchemy import SQLAlchemy
+import json
+import logging
+from cloudant.client import Cloudant
+from cloudant.query import Query
+from cloudant.adapters import Replay429Adapter
+from requests import HTTPError, ConnectionError
 
 logger = logging.getLogger("flask.app")
 
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
-class DataValidationError(Exception):
-    """ Used for an data validation errors when deserializing """
+# get configruation from enviuronment (12-factor)
+ADMIN_PARTY = os.environ.get('ADMIN_PARTY', 'False').lower() == 'true'
+CLOUDANT_HOST = os.environ.get('CLOUDANT_HOST', 'localhost')
+CLOUDANT_USERNAME = os.environ.get('CLOUDANT_USERNAME', 'admin')
+CLOUDANT_PASSWORD = os.environ.get('CLOUDANT_PASSWORD', 'pass')
+
+# global variables for retry (must be int)
+RETRY_COUNT = int(os.environ.get('RETRY_COUNT', 10))
+RETRY_DELAY = int(os.environ.get('RETRY_DELAY', 1))
+RETRY_BACKOFF = int(os.environ.get('RETRY_BACKOFF', 2))
+
+class DatabaseConnectionError(Exception):
+    """ Custom Exception when database connection fails """
     pass
 
+class DataValidationError(Exception):
+    """ Custom Exception with data validation fails """
+    pass
 
-class Product(db.Model):
-    """
-    Class that represents a product
-    """
+class Pet(object):
+    """ Pet interface to database """
 
-    app = None
+    logger = logging.getLogger(__name__)
+    client = None   # cloudant.client.Cloudant
+    database = None # cloudant.database.CloudantDatabase
 
-    # Table Schema
-    id = db.Column(db.Integer, primary_key=True)
-    sku = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(63), nullable=False)
-    category = db.Column(db.String(63), nullable=False)
-    short_description = db.Column(db.String(63), nullable=False)
-    long_description = db.Column(db.String(100))
-    price = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Integer)
-    available = db.Column(db.Boolean, nullable=False)
-    enabled = db.Column(db.Boolean, nullable=False)
-    likes = db.Column(db.Integer)
+    def __init__(self, name=None, category=None, available=True):
+        """ Constructor """
+        self.id = None
+        self.name = name
+        self.category = category
+        self.available = available
+
+# class Product(db.Model):
+#     """
+#     Class that represents a product
+#     """
+
+#     app = None
+
+#     # Table Schema
+#     id = db.Column(db.Integer, primary_key=True)
+#     sku = db.Column(db.Integer, nullable=False)
+#     name = db.Column(db.String(63), nullable=False)
+#     category = db.Column(db.String(63), nullable=False)
+#     short_description = db.Column(db.String(63), nullable=False)
+#     long_description = db.Column(db.String(100))
+#     price = db.Column(db.Integer, nullable=False)
+#     rating = db.Column(db.Integer)
+#     available = db.Column(db.Boolean, nullable=False)
+#     enabled = db.Column(db.Boolean, nullable=False)
+#     likes = db.Column(db.Integer)
 
     def __repr__(self):
         return "<Product %r id=[%s]>" % (self.name, self.id)
@@ -47,6 +81,15 @@ class Product(db.Model):
         self.id = None  # id must be none to generate next primary key
         db.session.add(self)
         db.session.commit()
+
+        try:
+            document = self.database.create_document(self.serialize())
+        except HTTPError as err:
+            Pet.logger.warning('Create failed: %s', err)
+            return
+
+        if document.exists():
+            self.id = document['_id']
 
     def save(self):
         """

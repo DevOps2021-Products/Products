@@ -189,6 +189,7 @@ class TestProductServer(TestCase):
 
         # Check the data is correct
         new_product = resp.get_json()
+        self.assertEqual(new_product["id"], 1)
         self.assertEqual(new_product["sku"], test_product.sku)
         self.assertEqual(new_product["name"], test_product.name)
         self.assertEqual(new_product["category"], test_product.category)

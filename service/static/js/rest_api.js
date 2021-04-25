@@ -6,7 +6,7 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#product_id").val(res._id);
+        $("#product_id").val(res.product_id);
         $("#product_name").val(res.name);
         $("#product_category").val(res.category);
         if (res.available == true) {
@@ -14,18 +14,23 @@ $(function () {
         } else {
             $("#product_available").val("false");
         }
+        if (res.enabled == true) {
+            $("#product_enabled").val("true");
+        } else {
+            $("#product_enabled").val("false");
+        }
         $("#product_sku").val(res.sku);
         $("#product_short_description").val(res.short_description);
         $("#product_available").val(res.available);
         $("#product_price").val(res.price);
         $("#product_rating").val(res.rating);
         $("#product_long_description").val(res.long_description);
-        $("#product_likes").val(res.likes)
+        $("#product_likes").val(res.likes);
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#product_id").val("");
+        $("#product_id").val(0);
         $("#product_name").val("");
         $("#product_category").val("");
         $("#product_available").val("");
@@ -51,6 +56,7 @@ $(function () {
 
     $("#create-btn").click(function () {
 
+        var id = $(#"product_id").val();
         var sku = $("#product_sku").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
@@ -63,16 +69,17 @@ $(function () {
         var likes = $("#product_likes").val();
 
         var data = {
+            "id": id,
             "sku": sku,
             "name": name,
             "category": category,
             "short_description": short_description,
             "long_description": long_description,
             "price": price,
-            "rating": parseInt(rating),
+            "rating": rating,
             "available": available,
             "enabled": enabled,
-            "likes": parseInt(likes)
+            "likes": likes
         };
 
         var ajax = $.ajax({
@@ -196,6 +203,7 @@ $(function () {
 
     $("#search-btn").click(function () {
 
+        var id = $("product_id").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
         var available = $("#product_available").val() == "true";
