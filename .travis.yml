@@ -8,7 +8,7 @@ services:
   - postgresql
 
 env:
-  - DATABASE_URI=postgres://postgres:@localhost:5432/postgres
+  - DATABASE_URI=postgres://postgres:@localhost:5984/postgres
 
 # command to install dependencies
 install: 
