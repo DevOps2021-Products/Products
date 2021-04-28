@@ -125,14 +125,14 @@ def list_products():
     products = []
     category = request.args.get("category")
     name = request.args.get("name")
-    stock_status = request.args.get("stock_status")
+    available = request.args.get("available")
     rating = request.args.get("rating")
     if category:
         products = Product.find_by_category(category)
     elif name:
         products = Product.find_by_name(name)
-    elif stock_status:
-        products = Product.find_by_stock_status(stock_status)
+    elif available:
+        products = Product.find_by_available(available)
     elif rating:
         products = Product.find_by_rating(rating)
     else:

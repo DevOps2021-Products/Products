@@ -1,6 +1,5 @@
 """
 Models for Product
-
 All of the models are stored in this module
 """
 import logging
@@ -14,7 +13,6 @@ db = SQLAlchemy()
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """
     pass
-
 
 class Product(db.Model):
     """
@@ -32,7 +30,7 @@ class Product(db.Model):
     long_description = db.Column(db.String(100))
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Integer)
-    stock_status = db.Column(db.Boolean, nullable=False)
+    available = db.Column(db.Boolean, nullable=False)
     enabled = db.Column(db.Boolean, nullable=False)
     likes = db.Column(db.Integer)
 
@@ -72,7 +70,7 @@ class Product(db.Model):
             "long_description": self.long_description,
             "price": self.price,
             "rating": self.rating,
-            "stock_status": self.stock_status,
+            "available": self.available,
             "enabled": self.enabled,
             "likes": self.likes
         }
@@ -92,7 +90,7 @@ class Product(db.Model):
             self.long_description = data.get("long_description")
             self.price = data["price"]
             self.rating = data.get("rating")
-            self.stock_status = data.get("stock_status")
+            self.available = data.get("available")
             self.enabled = data.get("enabled")
             self.likes = data.get("likes")
         except KeyError as error:
@@ -151,13 +149,13 @@ class Product(db.Model):
         return cls.query.filter(cls.category == category)
 
     @classmethod
-    def find_by_stock_status(cls, stock_status):
-        """Returns all of the Products with the given stock status
+    def find_by_available(cls, available):
+        """Returns all of the Products with the given availability
         Args:
-            stock_status (bool): the stock status of the Products you want to match
+            available (bool): the availability of the Products you want to match
         """
-        logger.info("Processing stock status query for %s ...", stock_status)
-        return cls.query.filter(cls.stock_status == stock_status)
+        logger.info("Processing available query for %s ...", available)
+        return cls.query.filter(cls.available == available)
 
     @classmethod
     def find_by_rating(cls, rating):

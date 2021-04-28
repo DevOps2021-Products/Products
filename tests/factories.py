@@ -16,7 +16,7 @@ class ProductFactory(factory.Factory):
     sku = FuzzyChoice(choices=[1234, 3456, 6789, 4179])
     name = FuzzyChoice(choices=["cheeseburger", "Macbook Pro", "iPhone 12 Pro", "Buzzsaw"])
     category = FuzzyChoice(choices=["food", "computers", "phones", "hardware"])
-    stock_status = FuzzyChoice(choices=[True, False])
+    available = FuzzyChoice(choices=[True, False])
     price = FuzzyChoice(choices=[100, 10000, 500, 750])
     short_description = FuzzyChoice(choices=["the tastiest food", "the fastest computer", "the shinest new phones", "the tools you need for the job"])
     rating = FuzzyChoice(choices=[1, 2, 3, 4, 5])

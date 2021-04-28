@@ -6,7 +6,7 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#product_id").val(res._id);
+        $("#product_id").val(res.id);
         $("#product_name").val(res.name);
         $("#product_category").val(res.category);
         if (res.available == true) {
@@ -14,11 +14,23 @@ $(function () {
         } else {
             $("#product_available").val("false");
         }
+        if (res.enabled == true) {
+            $("#product_enabled").val("true");
+        } else {
+            $("#product_enabled").val("false");
+        }
+        $("#product_sku").val(res.sku);
+        $("#product_short_description").val(res.short_description);
+        $("#product_available").val(res.available);
+        $("#product_price").val(res.price);
+        $("#product_rating").val(res.rating);
+        $("#product_long_description").val(res.long_description);
+        $("#product_likes").val(res.likes);
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#product_id").val("");
+        $("#product_id").val(0);
         $("#product_name").val("");
         $("#product_category").val("");
         $("#product_available").val("");
@@ -26,10 +38,10 @@ $(function () {
         $("#product_short_description").val("");
         $("#product_long_description").val("");
         $("#product_price").val("");
-        $("#product_rating").val("");
-        $("#product_stock_status").val("");
+        $("#product_rating").val(0);
+        $("#product_available").val("");
         $("#product_enabled").val("");
-        $("#product_likes").val("");
+        $("#product_likes").val(0);
     }
 
     // Updates the flash message area
@@ -48,24 +60,24 @@ $(function () {
         var name = $("#product_name").val();
         var category = $("#product_category").val();
         var short_description = $("#product_short_description").val();
-        var long_description = $("#product_long_description").val();
+        // var long_description = $("#product_long_description").val();
         var price = $("#product_price").val();
         var rating = $("#product_rating").val();
-        var stock_status = $("#product_stock_status").val() == "true";
+        var available = $("#product_available").val() == "true";
         var enabled = $("#product_enabled").val() == "true";
-        var likes = $("#product_likes").val();
+        // var likes = $("#product_likes").val();
 
         var data = {
             "sku": sku,
             "name": name,
             "category": category,
             "short_description": short_description,
-            "long_description": long_description,
+            // "long_description": long_description,
             "price": price,
             "rating": rating,
-            "stock_status": stock_status,
+            "available": available,
             "enabled": enabled,
-            "likes": likes
+            // "likes": likes
         };
 
         var ajax = $.ajax({
@@ -191,7 +203,8 @@ $(function () {
 
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+        var available = $("#product_available").val();
+        var rating = $("#product_rating").val();
 
         var queryString = ""
 
@@ -210,6 +223,13 @@ $(function () {
                 queryString += '&available=' + available
             } else {
                 queryString += 'available=' + available
+            }
+        }
+        if (rating) {
+            if (queryString.length > 0) {
+                queryString += '&rating=' + rating
+            } else {
+                queryString += 'rating=' + rating
             }
         }
 
@@ -233,7 +253,7 @@ $(function () {
             var firstProduct = "";
             for(var i = 0; i < res.length; i++) {
                 var product = res[i];
-                var row = "<tr><td>"+product._id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.available+"</td></tr>";
+                var row = "<tr><td>"+product.id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.available+"</td></tr>";
                 $("#search_results").append(row);
                 if (i == 0) {
                     firstProduct = product;

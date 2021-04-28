@@ -37,7 +37,7 @@ def step_impl(context):
             "category": row['category'],
             "short_description": row['short_description'],
             "price": row['price'],
-            "stock_status": row['stock_status'] in ['True', 'true', '1'],
+            "available": row['available'] in ['True', 'true', '1'],
             "enabled": row['enabled'] in ['True', 'true', '1']
             }
         payload = json.dumps(data)
@@ -106,7 +106,27 @@ def step_impl(context, element_name):
     context.clipboard = element.get_attribute('value')
     logging.info('Clipboard contains: %s', context.clipboard)
 
+@then('I copy the "{element_name}" field')
+def step_impl(context, element_name):
+    element_id = ID_PREFIX + element_name.lower()
+    # element = context.driver.find_element_by_id(element_id)
+    element = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
+        expected_conditions.presence_of_element_located((By.ID, element_id))
+    )
+    context.clipboard = element.get_attribute('value')
+    logging.info('Clipboard contains: %s', context.clipboard)
+
 @when('I paste the "{element_name}" field')
+def step_impl(context, element_name):
+    element_id = ID_PREFIX + element_name.lower()
+    # element = context.driver.find_element_by_id(element_id)
+    element = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
+        expected_conditions.presence_of_element_located((By.ID, element_id))
+    )
+    element.clear()
+    element.send_keys(context.clipboard)
+
+@then('I paste the "{element_name}" field')
 def step_impl(context, element_name):
     element_id = ID_PREFIX + element_name.lower()
     # element = context.driver.find_element_by_id(element_id)
@@ -127,12 +147,21 @@ def step_impl(context, element_name):
 @when('I press the "{button}" button')
 def step_impl(context, button):
     button_id = button.lower() + '-btn'
+    # context.driver.save_screenshot('debug.png')
     context.driver.find_element_by_id(button_id).click()
+    # context.driver.save_screenshot('debug.png')
+
+@then('I press the "{button}" button')
+def step_impl(context, button):
+    button_id = button.lower() + '-btn'
+    context.driver.find_element_by_id(button_id).click()
+    # context.driver.save_screenshot('debug.png')
 
 @then('I should see "{name}" in the results')
 def step_impl(context, name):
     # element = context.driver.find_element_by_id('search_results')
     # expect(element.text).to_contain(name)
+    context.driver.save_screenshot('debug.png')
     found = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
         expected_conditions.text_to_be_present_in_element(
             (By.ID, 'search_results'),
@@ -149,8 +178,9 @@ def step_impl(context, name):
 
 @then('I should see the message "{message}"')
 def step_impl(context, message):
-    context.driver.save_screenshot('debug.png')
+    # context.driver.save_screenshot('debug.png')
     element = context.driver.find_element_by_id('flash_message')
+    context.driver.save_screenshot('debug.png')
     found = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
         expected_conditions.text_to_be_present_in_element(
             (By.ID, 'flash_message'),
@@ -166,11 +196,26 @@ def step_impl(context, message):
 # We can then lowercase the name and prefix with product_ to get the id
 ##################################################################
 
+@when('I should see "{text_string}" in the "{element_name}" field')
+def step_impl(context, text_string, element_name):
+    element_id = ID_PREFIX + element_name.lower()
+    # element = context.driver.find_element_by_id(element_id)
+    # expect(element.get_attribute('value')).to_equal(text_string)
+    context.driver.save_screenshot('debug.png')
+    found = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
+        expected_conditions.text_to_be_present_in_element_value(
+            (By.ID, element_id),
+            text_string
+        )
+    )
+    expect(found).to_be(True)
+
 @then('I should see "{text_string}" in the "{element_name}" field')
 def step_impl(context, text_string, element_name):
     element_id = ID_PREFIX + element_name.lower()
     # element = context.driver.find_element_by_id(element_id)
     # expect(element.get_attribute('value')).to_equal(text_string)
+    context.driver.save_screenshot('debug.png')
     found = WebDriverWait(context.driver, context.WAIT_SECONDS).until(
         expected_conditions.text_to_be_present_in_element_value(
             (By.ID, element_id),
