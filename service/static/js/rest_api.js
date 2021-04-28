@@ -6,7 +6,7 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#product_id").val(res.product_id);
+        $("#product_id").val(res.id);
         $("#product_name").val(res.name);
         $("#product_category").val(res.category);
         if (res.available == true) {
@@ -56,30 +56,28 @@ $(function () {
 
     $("#create-btn").click(function () {
 
-        var id = $(#"product_id").val();
         var sku = $("#product_sku").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
         var short_description = $("#product_short_description").val();
-        var long_description = $("#product_long_description").val();
+        // var long_description = $("#product_long_description").val();
         var price = $("#product_price").val();
         var rating = $("#product_rating").val();
         var available = $("#product_available").val() == "true";
         var enabled = $("#product_enabled").val() == "true";
-        var likes = $("#product_likes").val();
+        // var likes = $("#product_likes").val();
 
         var data = {
-            "id": id,
             "sku": sku,
             "name": name,
             "category": category,
             "short_description": short_description,
-            "long_description": long_description,
+            // "long_description": long_description,
             "price": price,
             "rating": rating,
             "available": available,
             "enabled": enabled,
-            "likes": likes
+            // "likes": likes
         };
 
         var ajax = $.ajax({
@@ -203,10 +201,9 @@ $(function () {
 
     $("#search-btn").click(function () {
 
-        var id = $("product_id").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+        var available = $("#product_available").val();
         var rating = $("#product_rating").val();
 
         var queryString = ""
@@ -256,7 +253,7 @@ $(function () {
             var firstProduct = "";
             for(var i = 0; i < res.length; i++) {
                 var product = res[i];
-                var row = "<tr><td>"+product._id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.available+"</td></tr>";
+                var row = "<tr><td>"+product.id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.available+"</td></tr>";
                 $("#search_results").append(row);
                 if (i == 0) {
                     firstProduct = product;
