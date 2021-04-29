@@ -95,24 +95,17 @@ Scenario: Delete a Product
     When I press the "Delete" button
     Then I should see the message "Deleted"
 
-# Scenario: Update a Product
-#     When I visit the "Home Page"
-#     And I set the "Name" to "fido"
-#     And I press the "Update" button
-#     Then I should see "fido" in the "Name" field
-#     And I should see "dog" in the "Category" field
-#     When I change "Name" to "Boxer"
-#     And I press the "Update" button
-#     Then I should see the message "Success"
-#     When I copy the "Id" field
-#     And I press the "Clear" button
-#     And I paste the "Id" field
-#     And I press the "Retrieve" button
-#     Then I should see "Boxer" in the "Name" field
-#     When I press the "Clear" button
-#     And I press the "Search" button
-#     Then I should see "Boxer" in the results
-#     Then I should not see "fido" in the results
+Scenario: Update a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "iPhone"
+    And I press the "Search" button
+    And I copy the "ID" field
+    And I press the "Clear" button
+    And I paste the "ID" field
+    And I set the "Short Description" to "iPhone 12"
+    When I press the "Update" button
+    Then I should see the message "Success"
+    And I should see "iPhone 12" in the "Short Description" field
 
 Scenario: Create a Product Unsuccessfully
     When I visit the "Home Page"

@@ -104,15 +104,24 @@ $(function () {
 
     $("#update-btn").click(function () {
 
-        var product_id = $("#product_id").val();
         var name = $("#product_name").val();
+        var sku = $("#product_sku").val();
         var category = $("#product_category").val();
+        var price = $("#product_price").val();
         var available = $("#product_available").val() == "true";
+        var rating = $("#product_rating").val();
+        var short_description = $("$product_short_description").val;
+        var enabled = $("#product_enabled").val() == "true";
 
         var data = {
             "name": name,
+            "sku": sku,
             "category": category,
-            "available": available
+            "price": price,
+            "available": available,
+            "rating": rating,
+            "short_description": short_description,
+            "enabled": enabled
         };
 
         var ajax = $.ajax({
