@@ -73,17 +73,21 @@ Vagrant.configure(2) do |config|
     config.vm.provision "file", source: "~/.bluemix/apiKey.json", destination: "~/.bluemix/apiKey.json"
   end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
+  ######################################################################
+  # Setup a Python 3 development environment
+  ######################################################################
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y git vim tree python3 python3-pip python3-venv libpq-dev
-    apt-get -y autoremove
+    apt-get install -y git tree wget vim python3-dev python3-pip python3-venv apt-transport-https
+    apt-get upgrade python3
+    pip3 install -U pip
+    # Update pip and wheel so Python packages build correctly
+    pip3 install wheel
     # Create a Python3 Virtual Environment and Activate it in .profile
     sudo -H -u vagrant sh -c 'python3 -m venv ~/venv'
     sudo -H -u vagrant sh -c 'echo ". ~/venv/bin/activate" >> ~/.profile'
-    sudo -H -u vagrant sh -c '. ~/venv/bin/activate && cd /vagrant && pip install -r requirements.txt'
+    sudo -H -u vagrant sh -c '. ~/venv/bin/activate && pip3 install wheel && cd /vagrant && pip install -r requirements.txt'
+    
   SHELL
 
   ######################################################################
