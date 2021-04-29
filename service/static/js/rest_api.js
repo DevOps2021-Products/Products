@@ -196,6 +196,56 @@ $(function () {
     });
 
     // ****************************************
+    // Like a product
+    // ****************************************
+
+    $("#like-btn").click(function () {
+
+        var product_id = $("#product_id").val();
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/like",
+            contentType: "application/json",
+            data: '',
+        })
+
+        ajax.done(function(res){
+            clear_form_data()
+            flash_message("product has been Liked!")
+        });
+
+        ajax.fail(function(res){
+            flash_message("Server error!")
+        });
+    });
+
+    // ****************************************
+    // Disable a product
+    // ****************************************
+
+    $("#disable-btn").click(function () {
+
+        var product_id = $("#product_id").val();
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/disable",
+            contentType: "application/json",
+            data: '',
+        })
+
+        ajax.done(function(res){
+            clear_form_data()
+            flash_message("product has been Disabled!")
+        });
+
+        ajax.fail(function(res){
+            flash_message("Server error!")
+        });
+    });
+
+    // ****************************************
     // Clear the form
     // ****************************************
 

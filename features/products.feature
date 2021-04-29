@@ -113,20 +113,17 @@ Scenario: Like a Product
     And I copy the "ID" field
     And I press the "Clear" button
     And I paste the "ID" field
-    And I set the "Short Description" to "iPhone 12"
-    When I press the "Update" button
+    When I press the "Like" button
     Then I should see the message "Success"
 
-ScenarioLike a Product:
-
+Scenario: Disable a Product
     When I visit the "Home Page"
     And I set the "Name" to "iPhone"
     And I press the "Search" button
     And I copy the "ID" field
     And I press the "Clear" button
     And I paste the "ID" field
-    And I set the "Short Description" to "iPhone 12"
-    When I press the "Update" button
+    When I press the "Disable" button
     Then I should see the message "Success"
     
 Scenario: Create a Product Unsuccessfully
