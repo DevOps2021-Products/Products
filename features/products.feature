@@ -105,7 +105,30 @@ Scenario: Update a Product
     And I set the "Short Description" to "iPhone 12"
     When I press the "Update" button
     Then I should see the message "Success"
+    
+Scenario: Like a Product
+    When I visit the "Home Page"
+    And I set the "Name" to "iPhone"
+    And I press the "Search" button
+    And I copy the "ID" field
+    And I press the "Clear" button
+    And I paste the "ID" field
+    And I set the "Short Description" to "iPhone 12"
+    When I press the "Update" button
+    Then I should see the message "Success"
 
+ScenarioLike a Product:
+
+    When I visit the "Home Page"
+    And I set the "Name" to "iPhone"
+    And I press the "Search" button
+    And I copy the "ID" field
+    And I press the "Clear" button
+    And I paste the "ID" field
+    And I set the "Short Description" to "iPhone 12"
+    When I press the "Update" button
+    Then I should see the message "Success"
+    
 Scenario: Create a Product Unsuccessfully
     When I visit the "Home Page"
     And I set the "Sku" to "005"
