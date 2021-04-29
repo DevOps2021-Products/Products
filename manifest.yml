@@ -4,6 +4,8 @@ applications:
 - name: nyu-product-service-s21
   path: .
   instances: 1
+  host: nyu-products-service-s21
+  domain: nyu-products-service-s21.net
   memory: 128M
   routes:
   - route: nyu-product-service-s21.us-south.cf.appdomain.cloud
