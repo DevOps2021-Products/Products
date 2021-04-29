@@ -93,7 +93,7 @@ Scenario: Delete a Product
     And I press the "Clear" button
     And I paste the "ID" field
     When I press the "Delete" button
-    Then I should see the message "Deleted"
+    Then I should see the message "Deleted" 
 
 Scenario: Update a Product
     When I visit the "Home Page"
