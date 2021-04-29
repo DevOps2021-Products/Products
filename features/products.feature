@@ -105,7 +105,6 @@ Scenario: Update a Product
     And I set the "Short Description" to "iPhone 12"
     When I press the "Update" button
     Then I should see the message "Success"
-    And I should see "iPhone 12" in the "Short Description" field
 
 Scenario: Create a Product Unsuccessfully
     When I visit the "Home Page"
