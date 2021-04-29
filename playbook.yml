@@ -1,0 +1,72 @@
+---
+######################################################################
+# Perform maintenance on all servers
+######################################################################
+- name: Performing Package Maintenance on All nodes
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Update and upgrade local packages
+    apt: upgrade=yes update_cache=yes
+
+######################################################################
+# Web Servers
+######################################################################
+- hosts: webservers
+  become: yes
+
+  tasks:
+  - name: Ensure that Apache is at the latest version
+    apt: pkg=apache2 state=latest
+    notify:
+      - restart apache2
+
+  - name: Start Apache Services
+    service: name=apache2 enabled=yes state=started
+
+  handlers:
+  - name: restart apache2
+    service: name=apache2 state=restarted
+
+######################################################################
+# Database Servers
+######################################################################
+- hosts: dbservers
+  become: yes
+
+  tasks:
+  - name: Ensure Redis is installed
+    apt:
+      package: redis-server
+      state: present
+
+  - name: Ensure Redis is listening on all ports
+    lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '^bind '
+      insertafter: '^#bind '
+      line: bind 0.0.0.0
+    notify: Restart Redis
+
+  - name: Start Redis
+    service:
+      name: redis-server
+      state: started
+
+  handlers:
+  - name: Restart Redis
+    service:
+      name: redis-server
+      state: restarted
+
+
+######################################################################
+# Both web and db Servers
+######################################################################
+- hosts: webservers:dbservers
+  become: yes
+
+  tasks:
+  - name: Stop UFW NOW!!!
+    service: name=ufw state=stopped
