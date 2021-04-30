@@ -196,6 +196,94 @@ $(function () {
     });
 
     // ****************************************
+    // Like a product
+    // ****************************************
+
+    $("#like-btn").click(function () {
+
+        var product_id = $("#product_id").val();
+        var name = $("#product_name").val();
+        var sku = $("#product_sku").val();
+        var category = $("#product_category").val();
+        var price = $("#product_price").val();
+        var available = $("#product_available").val() == "true";
+        var rating = $("#product_rating").val();
+        var short_description = $("$product_short_description").val;
+        var enabled = $("#product_enabled").val() == "true";
+
+        var data = {
+            "name": name,
+            "sku": sku,
+            "category": category,
+            "price": price,
+            "available": available,
+            "rating": rating,
+            "short_description": short_description,
+            "enabled": enabled
+        };
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/like",
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        })
+
+        ajax.done(function(res){
+            clear_form_data()
+            flash_message("product has been Liked!")
+        });
+
+        ajax.fail(function(res){
+            flash_message("Server error!")
+        });
+    });
+
+    // ****************************************
+    // Disable a product
+    // ****************************************
+
+    $("#disable-btn").click(function () {
+
+        var product_id = $("#product_id").val();
+        var name = $("#product_name").val();
+        var sku = $("#product_sku").val();
+        var category = $("#product_category").val();
+        var price = $("#product_price").val();
+        var available = $("#product_available").val() == "true";
+        var rating = $("#product_rating").val();
+        var short_description = $("$product_short_description").val;
+        var enabled = $("#product_enabled").val() == "true";
+
+        var data = {
+            "name": name,
+            "sku": sku,
+            "category": category,
+            "price": price,
+            "available": available,
+            "rating": rating,
+            "short_description": short_description,
+            "enabled": enabled
+        };
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/disable",
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        })
+
+        ajax.done(function(res){
+            clear_form_data()
+            flash_message("product has been Disabled!")
+        });
+
+        ajax.fail(function(res){
+            flash_message("Server error!")
+        });
+    });
+
+    // ****************************************
     // Clear the form
     // ****************************************
 
