@@ -3,13 +3,13 @@ Global Configuration for Application
 """
 import os
 import json
-import logging
 
 # Get configuration from environment
 DATABASE_URI = os.getenv(
     "DATABASE_URI",
     "postgres://postgres:postgres@localhost:5432/postgres"
 )
+
 # override if we are running in Cloud Foundry
 if 'VCAP_SERVICES' in os.environ:
     vcap = json.loads(os.environ['VCAP_SERVICES'])
