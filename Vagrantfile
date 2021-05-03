@@ -103,16 +103,35 @@ Vagrant.configure(2) do |config|
     apt-get update
     apt-get install -y git tree wget vim jq python3-dev python3-pip python3-venv python3-selenium
     apt-get -y autoremove
+
     # Install Chromium Driver
     apt-get install -y chromium-chromedriver
+
+    # install docker-compose
+    pip3 install docker-compose
     
     # Create a Python3 Virtual Environment and Activate it in .profile
     sudo -H -u vagrant sh -c 'python3 -m venv ~/venv'
     sudo -H -u vagrant sh -c 'echo ". ~/venv/bin/activate" >> ~/.profile'
+
     # Install app dependencies
     sudo -H -u vagrant sh -c '. ~/venv/bin/activate && pip install wheel'
     sudo -H -u vagrant sh -c '. ~/venv/bin/activate && cd /vagrant && pip install -r requirements.txt'
+
+    # Check versions to prove that everything is installed
+    python3 --version
   SHELL
+
+  ############################################################
+  # Provision Docker with Vagrant before starting kubernetes
+  ############################################################
+  config.vm.provision "docker" do |d|
+    d.pull_images "alpine"
+    d.pull_images "python:3.8-slim"
+    d.pull_images "redis:6-alpine"
+    d.run "redis:6-alpine",
+      args: "--restart=always -d --name redis -p 6379:6379 -v redis:/data"
+  end
 
   ######################################################################
   # Add CouchDB docker container
