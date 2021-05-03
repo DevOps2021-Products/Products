@@ -126,12 +126,12 @@ Scenario: Disable a Product
     When I press the "Disable" button
     Then I should see the message "Success"
     
-Scenario: Create a Product Unsuccessfully
-    When I visit the "Home Page"
-    And I set the "Sku" to "005"
-    And I set the "Name" to "Airpods Max"
-    And I set the "Short Description" to "New Airpods over ear headphones"
-    And I select "True" in the "Available" dropdown
-    And I select "True" in the "Enabled" dropdown
-    And I press the "Create" button
-    Then I should see the message "Error"
+# Scenario: Create a Product Unsuccessfully
+#     When I visit the "Home Page"
+#     And I set the "Sku" to "005"
+#     And I set the "Name" to "Airpods Max"
+#     And I set the "Short Description" to "New Airpods over ear headphones"
+#     And I select "True" in the "Available" dropdown
+#     And I select "True" in the "Enabled" dropdown
+#     And I press the "Create" button
+#     Then I should see the message "Error"
